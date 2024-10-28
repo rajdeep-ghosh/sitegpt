@@ -1,0 +1,8 @@
+# next config
+next.config.mjs
+
+# tailwind config
+tailwind.config.js
+postcss.config.mjs
+
+prettier.config.mjs
