@@ -1,10 +1,13 @@
 import '@/styles/global.css';
 
-import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 
 import type { Metadata } from 'next';
 
-const inter = Inter({ subsets: ['latin'] });
+const geist = localFont({
+  src: '../assets/geist-sans-vf.woff',
+  weight: '100 900'
+});
 
 export const metadata: Metadata = {
   title: 'SiteGPT',
@@ -18,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={geist.className}>{children}</body>
     </html>
   );
 }
