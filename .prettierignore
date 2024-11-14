@@ -12,3 +12,9 @@ node_modules
 
 # vercel
 /.vercel/
+
+# lock files
+bun.lockb
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
