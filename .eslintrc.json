@@ -28,7 +28,7 @@
         "pathGroups": [
           {
             "pattern": "@/styles/**",
-            "group": "external",
+            "group": "builtin",
             "position": "before"
           },
           {
