@@ -16,12 +16,7 @@ export function BackgroundLines({
   };
 }) {
   return (
-    <div
-      className={cn(
-        'h-[20rem] md:h-screen w-full bg-white dark:bg-black',
-        className
-      )}
-    >
+    <div className={cn('h-[20rem] md:h-screen w-full', className)}>
       <SVG svgOptions={svgOptions} />
       {children}
     </div>
