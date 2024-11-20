@@ -4,13 +4,12 @@ import { motion } from 'framer-motion';
 
 import { cn } from '@/lib/utils';
 
-type BackgroundLinesProps = {
-  children: React.ReactNode;
+type BackgroundLinesProps = React.PropsWithChildren<{
   className?: string;
   svgOptions?: {
     duration: number;
   };
-};
+}>;
 
 export function BackgroundLines({
   children,
