@@ -65,6 +65,6 @@
   }
 
   body {
-    @apply bg-primary text-primary-foreground antialiased;
+    @apply bg-background text-foreground antialiased;
   }
 }
