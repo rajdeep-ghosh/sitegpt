@@ -9,7 +9,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'clash-display': 'var(--font-clash-display)'
+        'clash-display': 'var(--font-clash-display)',
+        sentient: 'var(--font-sentient)'
       },
       borderRadius: {
         lg: 'var(--radius)',

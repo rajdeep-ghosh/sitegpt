@@ -14,6 +14,10 @@ const clashDisplay = localFont({
   src: '../assets/clash-display-vf.woff2',
   variable: '--font-clash-display'
 });
+const sentient = localFont({
+  src: '../assets/sentient-vf.woff2',
+  variable: '--font-sentient'
+});
 
 export const metadata: Metadata = {
   title: 'SiteGPT',
@@ -28,7 +32,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang='en' className='dark'>
       <body
-        className={`${geist.className} ${clashDisplay.variable} bg-primary-foreground`}
+        className={`${geist.className} ${clashDisplay.variable} ${sentient.variable} bg-primary-foreground`}
       >
         <Header />
         {children}

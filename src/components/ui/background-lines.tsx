@@ -17,7 +17,7 @@ export function BackgroundLines({
   svgOptions
 }: BackgroundLinesProps) {
   return (
-    <div className={cn('h-[20rem] w-full md:h-screen', className)}>
+    <div className={cn('h-screen w-full', className)}>
       <SVG svgOptions={svgOptions} />
       {children}
     </div>
@@ -93,7 +93,7 @@ function SVG({ svgOptions }: Pick<BackgroundLinesProps, 'svgOptions'>) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className='absolute inset-0 size-full'
+      className='absolute -z-50 size-full'
     >
       {paths.map((path, idx) => (
         <motion.path
@@ -105,7 +105,7 @@ function SVG({ svgOptions }: Pick<BackgroundLinesProps, 'svgOptions'>) {
           initial='initial'
           animate='animate'
           transition={{
-            duration: svgOptions?.duration || 10,
+            duration: svgOptions?.duration ?? 10,
             ease: 'linear',
             repeat: Infinity,
             repeatType: 'loop',
@@ -127,7 +127,7 @@ function SVG({ svgOptions }: Pick<BackgroundLinesProps, 'svgOptions'>) {
           initial='initial'
           animate='animate'
           transition={{
-            duration: svgOptions?.duration || 10,
+            duration: svgOptions?.duration ?? 10,
             ease: 'linear',
             repeat: Infinity,
             repeatType: 'loop',
