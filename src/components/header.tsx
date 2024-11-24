@@ -9,10 +9,12 @@ export default function Header() {
         SiteGPT
       </Link>
       <div className='space-x-2'>
-        <Button variant='outline' className='rounded-lg p-0 px-3'>
+        <Button variant='outline' size='sm' className='rounded-lg text-sm'>
           Sign In
         </Button>
-        <Button className='rounded-lg p-0 px-3'>Sign Up</Button>
+        <Button size='sm' className='rounded-lg text-sm'>
+          Sign Up
+        </Button>
       </div>
     </header>
   );
