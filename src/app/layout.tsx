@@ -25,6 +25,30 @@ export const metadata: Metadata = {
   authors: {
     name: 'Rajdeep Ghosh',
     url: 'https://github.com/rajdeep-ghosh'
+  },
+  icons: {
+    icon: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        url: '/favicon-96x96.png',
+        sizes: '96x96'
+      },
+      {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        url: '/favicon.svg'
+      }
+    ],
+    shortcut: '/favicon.ico',
+    apple: {
+      url: '/apple-touch-icon.png',
+      sizes: '180x180'
+    }
+  },
+  manifest: '/site.webmanifest',
+  appleWebApp: {
+    title: 'SiteGPT'
   }
 };
 
