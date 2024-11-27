@@ -42,6 +42,11 @@
             "position": "after"
           },
           {
+            "pattern": "@/hooks/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "@/app/**",
             "group": "external",
             "position": "after"
