@@ -58,8 +58,10 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       <body
         className={`${geist.className} ${clashDisplay.variable} ${sentient.variable} bg-primary-foreground`}
       >
-        <Header />
-        {children}
+        <div className='relative w-full'>
+          <Header className='absolute top-0' />
+          {children}
+        </div>
       </body>
     </html>
   );
