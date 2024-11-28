@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Avatar } from '@radix-ui/react-avatar';
 import { ChevronsUpDown, MessageCirclePlus } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Sidebar,
@@ -19,12 +19,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarTrigger,
-  useSidebar
+  SidebarTrigger
 } from '@/components/ui/sidebar';
 
 export default function AppSidebar() {
-  const { state, isMobile } = useSidebar();
+  const isMobile = useIsMobile();
 
   return (
     <Sidebar collapsible='icon'>
@@ -47,9 +46,7 @@ export default function AppSidebar() {
               variant='outline'
               asChild
               tooltip='New Chat'
-              className={cn('font-medium', {
-                'justify-center': state === 'expanded'
-              })}
+              className='font-medium group-data-[state=expanded]:justify-center'
             >
               <Link href='/'>
                 <MessageCirclePlus className='size-4' />
@@ -75,8 +72,12 @@ export default function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu className='gap-4'>
           <SidebarMenuItem>
-            {state === 'collapsed' && !isMobile && (
-              <SidebarMenuButton asChild tooltip='Toggle Sidebar'>
+            {!isMobile && (
+              <SidebarMenuButton
+                asChild
+                tooltip='Toggle Sidebar'
+                className='group-data-[state=expanded]:hidden'
+              >
                 <SidebarTrigger />
               </SidebarMenuButton>
             )}
@@ -87,17 +88,11 @@ export default function AppSidebar() {
                 <AvatarImage src='' alt='' />
                 <AvatarFallback className='rounded-lg'>RG</AvatarFallback>
               </Avatar>
-              {state === 'expanded' && (
-                <>
-                  <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-semibold'>
-                      Rajdeep Ghosh
-                    </span>
-                    <span className='truncate text-xs'>rajdeep@air.com</span>
-                  </div>
-                  <ChevronsUpDown className='ml-auto size-4' />
-                </>
-              )}
+              <div className='grid flex-1 text-left text-sm leading-tight group-data-[state=collapsed]:hidden'>
+                <span className='truncate font-semibold'>Rajdeep Ghosh</span>
+                <span className='truncate text-xs'>rajdeep@air.com</span>
+              </div>
+              <ChevronsUpDown className='ml-auto size-4 group-data-[state=collapsed]:hidden' />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
