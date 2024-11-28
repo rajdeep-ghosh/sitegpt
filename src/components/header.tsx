@@ -8,7 +8,7 @@ type HeaderProps = React.HTMLAttributes<HTMLElement>;
 export default function Header({ className, ...props }: HeaderProps) {
   return (
     <header className={cn('w-full p-4', className)} {...props}>
-      <div className='flex items-center justify-between'>
+      <nav className='flex items-center justify-between'>
         <Link href='/' className='font-clash-display text-lg font-medium'>
           SiteGPT
         </Link>
@@ -20,7 +20,7 @@ export default function Header({ className, ...props }: HeaderProps) {
             Sign Up
           </Button>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }
