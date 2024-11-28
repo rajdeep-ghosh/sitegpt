@@ -2,6 +2,8 @@ import '@/styles/global.css';
 
 import localFont from 'next/font/local';
 
+import { SidebarProvider } from '@/components/ui/sidebar';
+import AppSidebar from '@/components/app-sidebar';
 import Header from '@/components/header';
 
 import type { Metadata } from 'next';
@@ -56,12 +58,15 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang='en' className='dark'>
       <body
-        className={`${geist.className} ${clashDisplay.variable} ${sentient.variable} bg-primary-foreground`}
+        className={`${geist.className} ${clashDisplay.variable} ${sentient.variable}`}
       >
-        <div className='relative w-full'>
-          <Header className='absolute top-0' />
-          {children}
-        </div>
+        <SidebarProvider>
+          <AppSidebar />
+          <div className='relative w-full'>
+            <Header className='absolute top-0' />
+            {children}
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   );
