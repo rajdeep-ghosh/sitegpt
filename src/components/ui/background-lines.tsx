@@ -4,20 +4,20 @@ import { motion } from 'framer-motion';
 
 import { cn } from '@/lib/utils';
 
-type BackgroundLinesProps = React.PropsWithChildren<{
-  className?: string;
+type BackgroundLinesProps = React.HTMLAttributes<HTMLDivElement> & {
   svgOptions?: {
     duration: number;
   };
-}>;
+};
 
 export function BackgroundLines({
   children,
   className,
-  svgOptions
+  svgOptions,
+  ...props
 }: BackgroundLinesProps) {
   return (
-    <div className={cn('h-screen w-full', className)}>
+    <div className={cn('h-screen w-full', className)} {...props}>
       <SVG svgOptions={svgOptions} />
       {children}
     </div>
