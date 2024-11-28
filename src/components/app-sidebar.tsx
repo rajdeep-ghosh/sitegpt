@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar } from '@radix-ui/react-avatar';
 import { ChevronsUpDown, MessageCirclePlus } from 'lucide-react';
@@ -27,8 +28,20 @@ export default function AppSidebar() {
 
   return (
     <Sidebar collapsible='icon'>
-      <SidebarHeader className='pt-4'>
-        <SidebarMenu>
+      <SidebarHeader className='pt-5'>
+        <SidebarMenu className='gap-4'>
+          <SidebarMenuItem>
+            <div className='flex items-center justify-between gap-2 group-data-[state=collapsed]:justify-center group-data-[state=expanded]:px-2'>
+              <Image
+                src='/favicon.svg'
+                alt='Logo'
+                width={24}
+                height={24}
+                className='size-6'
+              />
+              <SidebarTrigger className='group-data-[state=collapsed]:hidden' />
+            </div>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               variant='outline'
