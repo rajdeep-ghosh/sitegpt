@@ -1,6 +1,7 @@
 import '@/styles/global.css';
 
 import localFont from 'next/font/local';
+import { cookies } from 'next/headers';
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { LoaderCircle } from 'lucide-react';
@@ -60,7 +61,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children
 }: React.PropsWithChildren) {
+  const cookieStore = cookies();
   const { userId } = await auth();
+
+  const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
 
   return (
     <html lang='en' className='dark'>
@@ -74,7 +78,7 @@ export default async function RootLayout({
             </div>
           </ClerkLoading>
           <ClerkLoaded>
-            <SidebarProvider>
+            <SidebarProvider defaultOpen={defaultOpen}>
               {!!userId && <AppSidebar />}
               <div className='relative w-full'>
                 <Header className='absolute top-0' />
