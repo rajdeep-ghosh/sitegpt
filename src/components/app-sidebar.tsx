@@ -2,11 +2,26 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useClerk, useUser } from '@clerk/nextjs';
 import { Avatar } from '@radix-ui/react-avatar';
-import { ChevronsUpDown, MessageCirclePlus } from 'lucide-react';
+import {
+  ChevronsUpDown,
+  LogOut,
+  MessageCirclePlus,
+  Settings
+} from 'lucide-react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +39,8 @@ import {
 
 export default function AppSidebar() {
   const isMobile = useIsMobile();
+  const { user } = useUser();
+  const { openUserProfile, signOut } = useClerk();
 
   return (
     <Sidebar collapsible='icon'>
@@ -83,17 +100,77 @@ export default function AppSidebar() {
             )}
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton size='lg' tooltip='Profile'>
-              <Avatar className='size-8 rounded-lg'>
-                <AvatarImage src='' alt='' />
-                <AvatarFallback className='rounded-lg'>RG</AvatarFallback>
-              </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight group-data-[state=collapsed]:hidden'>
-                <span className='truncate font-semibold'>Rajdeep Ghosh</span>
-                <span className='truncate text-xs'>rajdeep@air.com</span>
-              </div>
-              <ChevronsUpDown className='ml-auto size-4 group-data-[state=collapsed]:hidden' />
-            </SidebarMenuButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size='lg' tooltip='Profile'>
+                  <Avatar className='size-8'>
+                    <AvatarImage
+                      src={user?.imageUrl}
+                      alt={user?.fullName ?? 'avatar'}
+                      className='rounded'
+                    />
+                    <AvatarFallback className='rounded uppercase'>
+                      {`${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className='grid flex-1 text-left text-sm leading-tight group-data-[state=collapsed]:hidden'>
+                    <span className='truncate font-semibold'>
+                      {user?.fullName}
+                    </span>
+                    <span className='truncate text-xs'>
+                      {user?.primaryEmailAddress?.emailAddress}
+                    </span>
+                  </div>
+                  <ChevronsUpDown className='ml-auto size-4 group-data-[state=collapsed]:hidden' />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+                side={isMobile ? 'bottom' : 'right'}
+                align='end'
+                sideOffset={4}
+              >
+                <DropdownMenuLabel className='p-0 font-normal'>
+                  <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                    <Avatar className='size-8'>
+                      <AvatarImage
+                        src={user?.imageUrl}
+                        alt={user?.fullName ?? 'avatar'}
+                        className='rounded'
+                      />
+                      <AvatarFallback className='rounded uppercase'>
+                        {`${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className='grid flex-1 text-left text-sm leading-tight'>
+                      <span className='truncate font-semibold'>
+                        {user?.fullName}
+                      </span>
+                      <span className='truncate text-xs'>
+                        {user?.primaryEmailAddress?.emailAddress}
+                      </span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    onClick={() => openUserProfile()}
+                    className='cursor-pointer'
+                  >
+                    <Settings />
+                    Manage Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => signOut()}
+                    className='cursor-pointer'
+                  >
+                    <LogOut />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
