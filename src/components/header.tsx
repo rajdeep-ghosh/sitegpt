@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SignedOut } from '@clerk/nextjs';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,12 +14,19 @@ export default function Header({ className, ...props }: HeaderProps) {
           SiteGPT
         </Link>
         <div className='space-x-2'>
-          <Button variant='outline' size='sm' className='rounded-lg text-sm'>
-            Sign In
-          </Button>
-          <Button size='sm' className='rounded-lg text-sm'>
-            Sign Up
-          </Button>
+          <SignedOut>
+            <Button
+              variant='outline'
+              size='sm'
+              asChild
+              className='rounded-lg text-sm'
+            >
+              <Link href='/sign-in'>Sign In</Link>
+            </Button>
+            <Button size='sm' asChild className='rounded-lg text-sm'>
+              <Link href='/sign-up'>Sign Up</Link>
+            </Button>
+          </SignedOut>
         </div>
       </nav>
     </header>

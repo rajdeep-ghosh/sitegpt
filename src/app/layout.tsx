@@ -1,6 +1,7 @@
 import '@/styles/global.css';
 
 import localFont from 'next/font/local';
+import { ClerkProvider } from '@clerk/nextjs';
 
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
@@ -60,13 +61,15 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       <body
         className={`${geist.className} ${clashDisplay.variable} ${sentient.variable}`}
       >
-        <SidebarProvider>
-          <AppSidebar />
-          <div className='relative w-full'>
-            <Header className='absolute top-0' />
-            {children}
-          </div>
-        </SidebarProvider>
+        <ClerkProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <div className='relative w-full'>
+              <Header className='absolute top-0' />
+              {children}
+            </div>
+          </SidebarProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
