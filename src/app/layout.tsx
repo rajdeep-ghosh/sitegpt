@@ -1,8 +1,9 @@
 import '@/styles/global.css';
 
 import localFont from 'next/font/local';
-import { ClerkProvider } from '@clerk/nextjs';
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
+import { LoaderCircle } from 'lucide-react';
 
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
@@ -67,13 +68,20 @@ export default async function RootLayout({
         className={`${geist.className} ${clashDisplay.variable} ${sentient.variable}`}
       >
         <ClerkProvider>
-          <SidebarProvider>
-            {!!userId && <AppSidebar />}
-            <div className='relative w-full'>
-              <Header className='absolute top-0' />
-              {children}
+          <ClerkLoading>
+            <div className='grid h-screen place-items-center'>
+              <LoaderCircle className='size-24 animate-spin text-muted-foreground' />
             </div>
-          </SidebarProvider>
+          </ClerkLoading>
+          <ClerkLoaded>
+            <SidebarProvider>
+              {!!userId && <AppSidebar />}
+              <div className='relative w-full'>
+                <Header className='absolute top-0' />
+                {children}
+              </div>
+            </SidebarProvider>
+          </ClerkLoaded>
         </ClerkProvider>
       </body>
     </html>
