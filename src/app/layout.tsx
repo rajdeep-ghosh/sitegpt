@@ -2,6 +2,7 @@ import '@/styles/global.css';
 
 import localFont from 'next/font/local';
 import { ClerkProvider } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
@@ -55,7 +56,11 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({ children }: React.PropsWithChildren) {
+export default async function RootLayout({
+  children
+}: React.PropsWithChildren) {
+  const { userId } = await auth();
+
   return (
     <html lang='en' className='dark'>
       <body
@@ -63,7 +68,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       >
         <ClerkProvider>
           <SidebarProvider>
-            <AppSidebar />
+            {!!userId && <AppSidebar />}
             <div className='relative w-full'>
               <Header className='absolute top-0' />
               {children}
