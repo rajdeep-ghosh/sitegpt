@@ -27,6 +27,7 @@
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
+    "@upstash/rag-chat": "^2.0.3",
     "drizzle-orm": "^0.36.4",
     "framer-motion": "^11.11.17",
     "lucide-react": "^0.456.0",
