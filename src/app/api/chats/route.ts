@@ -4,12 +4,21 @@ import { eq } from 'drizzle-orm';
 import db from '@/lib/db';
 import { indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag-chat';
+import { isHTML } from '@/lib/utils';
 
 import type { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as { knowledge_src: string };
+
+    const isURLSupported = await isHTML(body.knowledge_src);
+    if (!isURLSupported) {
+      return NextResponse.json(
+        'The provided URL does not point to an HTML document',
+        { status: 400 }
+      );
+    }
 
     const isURLIndexed = await db.query.indexedUrlsTable.findFirst({
       where: eq(indexedUrlsTable.url, body.knowledge_src),
