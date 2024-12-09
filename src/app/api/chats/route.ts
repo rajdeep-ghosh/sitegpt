@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 
 import db from '@/lib/db';
 import { indexedUrlsTable } from '@/lib/db/schema';
-import { ragChat } from '@/lib/rag-chat';
+import { ragChat } from '@/lib/rag';
 import { isHTML } from '@/lib/utils';
 
 import type { NextRequest } from 'next/server';
