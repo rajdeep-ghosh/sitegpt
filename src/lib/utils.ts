@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function isHTML(url: string) {
   const response = await fetch(url, { method: 'HEAD' });
-  if (!response) throw new Error('HTTP Error');
+  if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
   const contentType = response.headers.get('Content-Type');
   if (contentType && contentType.includes('text/html')) return true;
