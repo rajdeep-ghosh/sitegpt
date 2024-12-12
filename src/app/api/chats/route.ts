@@ -3,9 +3,9 @@ import { auth } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 
 import db from '@/lib/db';
-import { indexedUrlsTable } from '@/lib/db/schema';
+import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
-import { isHTML } from '@/lib/utils';
+import { extractSiteTitle, isHTML } from '@/lib/utils';
 
 import type { NextRequest } from 'next/server';
 
@@ -42,7 +42,17 @@ export async function POST(req: NextRequest) {
       await db.insert(indexedUrlsTable).values({ url: body.knowledge_src });
     }
 
-    return NextResponse.json('ok');
+    const siteTitle = await extractSiteTitle(body.knowledge_src);
+    const [newChat] = await db
+      .insert(chatsTable)
+      .values({
+        userId,
+        siteTitle,
+        siteUrl: body.knowledge_src
+      })
+      .returning();
+
+    return NextResponse.json(newChat, { status: 201 });
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(err.message, { status: 500 });
