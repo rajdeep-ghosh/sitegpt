@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 
 import db from '@/lib/db';
@@ -9,6 +10,12 @@ import { isHTML } from '@/lib/utils';
 import type { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json('Unauthorized', { status: 401 });
+  }
+
   try {
     const body = (await req.json()) as { knowledge_src: string };
 
