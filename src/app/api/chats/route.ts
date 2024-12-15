@@ -7,7 +7,7 @@ import { createChatReqSchema } from '@/lib/api/schema/chats';
 import db from '@/lib/db';
 import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
-import { extractSiteTitle, isHTML } from '@/lib/utils';
+import { extractSiteTitle, isHTML } from '@/lib/server-utils';
 
 import type { NextRequest } from 'next/server';
 
