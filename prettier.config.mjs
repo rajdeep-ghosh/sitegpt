@@ -18,12 +18,12 @@ const config = {
     '^@/components/(.*)$',
     '^@/styles/(.*)$',
     '',
+    '^[./]',
+    '',
     '<TYPES>^(node:)',
     '<TYPES>',
     '<TYPES>^@/types(?:/(.*))?$',
-    '<TYPES>^[.]',
-    '',
-    '^[./]'
+    '<TYPES>^[.]'
   ],
   importOrderSeparation: false,
   importOrderSortSpecifiers: true,
