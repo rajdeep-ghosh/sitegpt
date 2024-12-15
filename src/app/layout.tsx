@@ -7,6 +7,7 @@ import { auth } from '@clerk/nextjs/server';
 import { LoaderCircle } from 'lucide-react';
 
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { Toaster } from '@/components/ui/toaster';
 import AppSidebar from '@/components/app-sidebar';
 import Header from '@/components/header';
 
@@ -87,6 +88,7 @@ export default async function RootLayout({
             </SidebarProvider>
           </ClerkLoaded>
         </ClerkProvider>
+        <Toaster />
       </body>
     </html>
   );
