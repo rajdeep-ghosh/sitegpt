@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { generateErrorMessage } from 'zod-error';
 
 import { createChatReqSchema } from '@/lib/api/schema/chats';
@@ -79,6 +79,37 @@ export async function POST(req: NextRequest) {
       { status: 'success', data: newChat },
       { status: 201 }
     );
+  } catch (err) {
+    if (err instanceof Error) {
+      return NextResponse.json(
+        { status: 'error', message: err.message },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      { status: 'error', message: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { status: 'error', message: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const chats = await db.query.chatsTable.findMany({
+      where: eq(chatsTable.userId, userId),
+      orderBy: [desc(chatsTable.createdAt)]
+    });
+
+    return NextResponse.json({ status: 'success', data: chats });
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(
