@@ -6,10 +6,12 @@ import { useClerk, useUser } from '@clerk/nextjs';
 import { Avatar } from '@radix-ui/react-avatar';
 import {
   ChevronsUpDown,
+  Loader,
   LogOut,
   MessageCirclePlus,
   Settings
 } from 'lucide-react';
+import useSWR from 'swr';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,10 +39,20 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
+import type { Chats } from '@/types';
+
 export default function AppSidebar() {
   const isMobile = useIsMobile();
+
   const { user } = useUser();
   const { openUserProfile, signOut } = useClerk();
+
+  const { data: chats, isLoading } = useSWR<Chats>(
+    '/api/chats',
+    (url: string) => {
+      return fetch(url).then((res) => res.json());
+    }
+  );
 
   return (
     <Sidebar collapsible='icon'>
@@ -73,17 +85,40 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className='[scrollbar-color:#3f3f46_#27272a] [scrollbar-width:thin]'>
         <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
-          <SidebarGroupLabel>Recents</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>Chat 1</SidebarMenuButton>
-                <SidebarMenuButton>Chat 2</SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {isLoading ? (
+            <Loader className='mt-2 size-4 w-full animate-spin text-red-50' />
+          ) : chats && chats.status === 'error' ? (
+            <div className='mt-2 text-center'>
+              <span className='text-sm font-extralight italic'>
+                Unable to load history
+              </span>
+            </div>
+          ) : (
+            <>
+              <SidebarGroupLabel>Recents</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    {chats && chats.data.length > 0 ? (
+                      chats.data.map((chat) => (
+                        <SidebarMenuButton key={chat.id}>
+                          <span>{chat.siteTitle}</span>
+                        </SidebarMenuButton>
+                      ))
+                    ) : (
+                      <div className='mt-2 text-center'>
+                        <span className='fon text-xs text-muted-foreground'>
+                          No chats yet. Start a convo!
+                        </span>
+                      </div>
+                    )}
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </>
+          )}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
