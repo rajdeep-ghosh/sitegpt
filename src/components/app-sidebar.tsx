@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useClerk, useUser } from '@clerk/nextjs';
 import { Avatar } from '@radix-ui/react-avatar';
 import {
@@ -42,6 +43,8 @@ import {
 import type { Chats } from '@/types';
 
 export default function AppSidebar() {
+  const pathname = usePathname();
+
   const isMobile = useIsMobile();
 
   const { user } = useUser();
@@ -103,8 +106,14 @@ export default function AppSidebar() {
                   <SidebarMenuItem>
                     {chats && chats.data.length > 0 ? (
                       chats.data.map((chat) => (
-                        <SidebarMenuButton key={chat.id}>
-                          <span>{chat.siteTitle}</span>
+                        <SidebarMenuButton
+                          key={chat.id}
+                          isActive={chat.id === pathname.split('/').pop()}
+                          asChild
+                        >
+                          <Link href={`/c/${chat.id}`}>
+                            <span>{chat.siteTitle}</span>
+                          </Link>
                         </SidebarMenuButton>
                       ))
                     ) : (
