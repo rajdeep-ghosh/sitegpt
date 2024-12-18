@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
 import { ArrowUp } from 'lucide-react';
+import { mutate } from 'swr';
 
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
@@ -57,6 +58,7 @@ export default function URLInput() {
           throw new Error(body.message);
 
         case 'success':
+          void mutate('/api/chats');
           router.push(`/c/${body.data.id}`);
       }
     } catch (err) {
