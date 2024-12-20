@@ -113,7 +113,7 @@ export default function AppSidebar() {
                           isActive={chat.id === pathname.split('/').pop()}
                           asChild
                         >
-                          <Link href={`/c/${chat.id}`}>
+                          <Link href={`/c/${chat.id}`} title={chat.siteTitle}>
                             <span>{chat.siteTitle}</span>
                           </Link>
                         </SidebarMenuButton>
