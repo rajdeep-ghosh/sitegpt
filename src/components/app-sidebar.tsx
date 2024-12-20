@@ -91,7 +91,7 @@ export default function AppSidebar() {
       <SidebarContent className='[scrollbar-color:#3f3f46_#27272a] [scrollbar-width:thin]'>
         <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
           {isLoading ? (
-            <Loader className='mt-2 size-4 w-full animate-spin text-red-50' />
+            <Loader className='mt-3 size-4 w-full animate-spin text-red-50' />
           ) : chats && chats.status === 'error' ? (
             <div className='mt-2 text-center'>
               <span className='text-sm font-extralight italic'>
@@ -102,12 +102,11 @@ export default function AppSidebar() {
             <>
               <SidebarGroupLabel>Recents</SidebarGroupLabel>
               <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    {chats && chats.data.length > 0 ? (
-                      chats.data.map((chat) => (
+                <SidebarMenu className='gap-1.5'>
+                  {chats && chats.data.length > 0 ? (
+                    chats.data.map((chat) => (
+                      <SidebarMenuItem key={chat.id}>
                         <SidebarMenuButton
-                          key={chat.id}
                           isActive={chat.id === pathname.split('/').pop()}
                           asChild
                         >
@@ -115,15 +114,15 @@ export default function AppSidebar() {
                             <span>{chat.siteTitle}</span>
                           </Link>
                         </SidebarMenuButton>
-                      ))
-                    ) : (
-                      <div className='mt-2 text-center'>
-                        <span className='fon text-xs text-muted-foreground'>
-                          No chats yet. Start a convo!
-                        </span>
-                      </div>
-                    )}
-                  </SidebarMenuItem>
+                      </SidebarMenuItem>
+                    ))
+                  ) : (
+                    <div className='mt-3 text-center'>
+                      <span className='fon text-xs text-muted-foreground'>
+                        No chats yet. Start a convo!
+                      </span>
+                    </div>
+                  )}
                 </SidebarMenu>
               </SidebarGroupContent>
             </>

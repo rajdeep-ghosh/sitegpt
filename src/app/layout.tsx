@@ -6,6 +6,7 @@ import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
 import { LoaderCircle } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import AppSidebar from '@/components/app-sidebar';
@@ -70,7 +71,11 @@ export default async function RootLayout({
   return (
     <html lang='en' className='dark'>
       <body
-        className={`${geist.className} ${clashDisplay.variable} ${sentient.variable}`}
+        className={cn(
+          geist.className,
+          clashDisplay.variable,
+          sentient.variable
+        )}
       >
         <ClerkProvider>
           <ClerkLoading>
