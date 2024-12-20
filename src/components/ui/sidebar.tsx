@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
-import { PanelLeft } from 'lucide-react';
+import { AlignLeft, PanelLeft, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -271,9 +271,11 @@ Sidebar.displayName = 'Sidebar';
 
 const SidebarTrigger = forwardRef<
   React.ElementRef<typeof Button>,
-  React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
+  React.ComponentProps<typeof Button> & { icon?: 'panel' | 'align' | 'x' }
+>(({ className, onClick, icon = 'panel', ...props }, ref) => {
   const { toggleSidebar } = useSidebar();
+
+  const Icon = icon === 'panel' ? PanelLeft : icon === 'align' ? AlignLeft : X;
 
   return (
     <Button
@@ -288,7 +290,7 @@ const SidebarTrigger = forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      <Icon />
       <span className='sr-only'>Toggle Sidebar</span>
     </Button>
   );

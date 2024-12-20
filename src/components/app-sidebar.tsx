@@ -70,7 +70,10 @@ export default function AppSidebar() {
                 height={24}
                 className='size-6'
               />
-              <SidebarTrigger className='group-data-[state=collapsed]:hidden' />
+              <SidebarTrigger
+                icon={isMobile ? 'x' : 'panel'}
+                className='group-data-[state=collapsed]:hidden'
+              />
             </div>
           </SidebarMenuItem>
           <SidebarMenuItem>
