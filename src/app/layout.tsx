@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
 import AppSidebar from '@/components/app-sidebar';
-import Header from '@/components/header';
 
 import type { Metadata } from 'next';
 
@@ -86,10 +85,7 @@ export default async function RootLayout({
           <ClerkLoaded>
             <SidebarProvider defaultOpen={defaultOpen}>
               {!!userId && <AppSidebar />}
-              <div className='relative w-full'>
-                <Header className='absolute top-0' />
-                {children}
-              </div>
+              <div className='relative w-full'>{children}</div>
             </SidebarProvider>
           </ClerkLoaded>
         </ClerkProvider>

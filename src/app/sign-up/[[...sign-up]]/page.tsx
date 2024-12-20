@@ -1,9 +1,14 @@
 import { SignUp } from '@clerk/nextjs';
 
+import Header from '@/components/header';
+
 export default function SignUpPage() {
   return (
-    <main className='grid h-screen place-items-center'>
-      <SignUp />
-    </main>
+    <>
+      <Header className='absolute top-0' />
+      <main className='grid h-screen place-items-center'>
+        <SignUp />
+      </main>
+    </>
   );
 }
