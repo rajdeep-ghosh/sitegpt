@@ -31,3 +31,15 @@ export type Chats =
       status: 'error';
       message: string;
     };
+
+export type Chat = {
+  status: 'success';
+  data: {
+    id: string;
+    userId: string;
+    siteTitle: string;
+    siteUrl: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
