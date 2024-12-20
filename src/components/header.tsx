@@ -1,20 +1,34 @@
 import Link from 'next/link';
-import { SignedOut } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
-export default function Header({ className, children, ...props }: HeaderProps) {
+export default async function Header({
+  className,
+  children,
+  ...props
+}: HeaderProps) {
+  const { userId } = await auth();
+  const isSignedIn = !!userId;
+
   return (
     <header className={cn('w-full p-4', className)} {...props}>
       <nav className='flex items-center justify-between'>
-        <Link href='/' className='font-clash-display text-lg font-medium'>
+        {isSignedIn && <SidebarTrigger icon='align' className='md:hidden' />}
+        <Link
+          href='/'
+          className={cn('font-clash-display text-lg font-medium', {
+            'hidden md:block': isSignedIn
+          })}
+        >
           SiteGPT
         </Link>
         {children}
-        <SignedOut>
+        {!isSignedIn && (
           <div className='space-x-2'>
             <Button
               variant='outline'
@@ -28,7 +42,7 @@ export default function Header({ className, children, ...props }: HeaderProps) {
               <Link href='/sign-up'>Sign Up</Link>
             </Button>
           </div>
-        </SignedOut>
+        )}
       </nav>
     </header>
   );
