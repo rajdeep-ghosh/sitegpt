@@ -18,7 +18,7 @@ import type { TCreateChatRes } from '@/types';
 export default function URLInput() {
   const router = useRouter();
 
-  const { userId } = useAuth();
+  const { isSignedIn } = useAuth();
   const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -37,7 +37,7 @@ export default function URLInput() {
   }, [content]);
 
   async function handleSubmit() {
-    if (!!userId === false) {
+    if (!isSignedIn) {
       setShowAuthPopup(true);
       return;
     }
