@@ -23,3 +23,7 @@ export const updateChatReqSchema = {
     title: z.string()
   })
 };
+
+export const deleteChatReqSchema = z.object({
+  id: z.string().uuid()
+});

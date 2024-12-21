@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { and, eq, sql } from 'drizzle-orm';
 import { generateErrorMessage } from 'zod-error';
 
-import { updateChatReqSchema } from '@/lib/api/schema';
+import { deleteChatReqSchema, updateChatReqSchema } from '@/lib/api/schema';
 import db from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
 
@@ -95,6 +95,58 @@ export async function PATCH(req: NextRequest, { params: _params }: RouteProps) {
       .returning();
 
     return NextResponse.json({ status: 'success', data: updatedData });
+  } catch (err) {
+    if (err instanceof Error) {
+      return NextResponse.json(
+        { status: 'error', message: err.message },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      { status: 'error', message: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params: _params }: RouteProps
+) {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { status: 'error', message: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const params = deleteChatReqSchema.safeParse(_params);
+
+    if (!params.success) {
+      const errMsg = generateErrorMessage(params.error.issues, {
+        maxErrors: 1,
+        delimiter: { component: ': ' },
+        code: { enabled: false },
+        path: { enabled: true, type: 'objectNotation', label: '' },
+        message: { enabled: true, label: '' }
+      });
+      return NextResponse.json(
+        { status: 'error', message: errMsg },
+        { status: 400 }
+      );
+    }
+
+    const [deletedData] = await db
+      .delete(chatsTable)
+      .where(
+        and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.data?.id!))
+      )
+      .returning({ id: chatsTable.id });
+
+    return NextResponse.json({ status: 'success', data: deletedData });
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(
