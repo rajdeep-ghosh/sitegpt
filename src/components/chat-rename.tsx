@@ -63,7 +63,7 @@ export default function ChatRename({
 
         case 'success':
           onOpenChange(false);
-          mutate('/api/chats');
+          void mutate('/api/chats');
           toast({
             title: 'Success',
             description: 'Chat Renamed'
