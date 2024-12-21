@@ -16,7 +16,8 @@ type RouteProps = {
 };
 
 export async function GET(req: NextRequest, { params }: RouteProps) {
-  const userId = req.headers.get('x-userid');
+  const { userId: _userId } = await auth();
+  const userId = _userId ?? req.headers.get('x-userid');
 
   if (!userId) {
     return NextResponse.json(
