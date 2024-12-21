@@ -14,3 +14,12 @@ const urlRegex =
 export const createChatReqSchema = z.object({
   knowledge_src: z.string().regex(urlRegex, 'Invalid URL')
 });
+
+export const updateChatReqSchema = {
+  params: z.object({
+    id: z.string().uuid()
+  }),
+  body: z.object({
+    title: z.string()
+  })
+};
