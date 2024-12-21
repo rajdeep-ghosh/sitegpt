@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Ellipsis, Link, PenLine } from 'lucide-react';
+import { Check, Ellipsis, Link, PenLine, Trash } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,6 +19,7 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar';
 
+import ChatDelete from './chat-delete';
 import ChatRename from './chat-rename';
 
 import type { Chat } from '@/types';
@@ -30,6 +31,7 @@ type ChatActionProps = {
 export default function ChatAction({ chat }: ChatActionProps) {
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [openChatRename, setOpenChatRename] = useState(false);
+  const [openChatDelete, setOpenChatDelete] = useState(false);
 
   return (
     <>
@@ -81,6 +83,15 @@ export default function ChatAction({ chat }: ChatActionProps) {
                           <span>Rename</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
+                      <SidebarMenuItem>
+                        <SidebarMenuButton
+                          onClick={() => setOpenChatDelete(true)}
+                          className='text-red-400 hover:bg-red-400/15 hover:text-red-400 active:bg-red-400/15 active:text-red-400 [&>svg]:text-red-400 [&>svg]:transition-colors [&>svg]:[shape-rendering:crispEdges] [&>svg]:hover:text-current'
+                        >
+                          <Trash />
+                          <span>Delete</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
                     </SidebarMenu>
                   </SidebarGroupContent>
                 </SidebarGroup>
@@ -92,6 +103,11 @@ export default function ChatAction({ chat }: ChatActionProps) {
       <ChatRename
         open={openChatRename}
         onOpenChange={setOpenChatRename}
+        chat={chat}
+      />
+      <ChatDelete
+        open={openChatDelete}
+        onOpenChange={setOpenChatDelete}
         chat={chat}
       />
     </>
