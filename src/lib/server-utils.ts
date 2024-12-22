@@ -1,4 +1,8 @@
 import { JSDOM } from 'jsdom';
+import { generateErrorMessage } from 'zod-error';
+
+import type { ZodIssue } from 'zod';
+import type { ErrorMessageOptions } from 'zod-error';
 
 export const isServer = typeof window === 'undefined' ? false : true;
 
@@ -19,4 +23,18 @@ export async function extractSiteTitle(url: string) {
   const { document } = new JSDOM(html).window;
   const title = document.querySelector('title')?.textContent ?? 'Untitled';
   return title;
+}
+
+export function validationErrorMessage(
+  issues: ZodIssue[],
+  options?: ErrorMessageOptions
+) {
+  return generateErrorMessage(issues, {
+    maxErrors: 1,
+    delimiter: { component: ': ' },
+    code: { enabled: false },
+    path: { enabled: true, type: 'objectNotation', label: '' },
+    message: { enabled: true, label: '' },
+    ...options
+  });
 }

@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { desc, eq } from 'drizzle-orm';
-import { generateErrorMessage } from 'zod-error';
 
 import { createChatReqSchema } from '@/lib/api/schema';
 import db from '@/lib/db';
 import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
-import { extractSiteTitle, isHTML } from '@/lib/server-utils';
+import {
+  extractSiteTitle,
+  isHTML,
+  validationErrorMessage
+} from '@/lib/server-utils';
 
 import type { NextRequest } from 'next/server';
 
@@ -25,13 +28,7 @@ export async function POST(req: NextRequest) {
     const body = createChatReqSchema.safeParse(await req.json());
 
     if (!body.success) {
-      const errMsg = generateErrorMessage(body.error.issues, {
-        maxErrors: 1,
-        delimiter: { component: ': ' },
-        code: { enabled: false },
-        path: { enabled: true, type: 'objectNotation', label: '' },
-        message: { enabled: true, label: '' }
-      });
+      const errMsg = validationErrorMessage(body.error.issues);
       return NextResponse.json(
         { status: 'error', message: errMsg },
         { status: 400 }

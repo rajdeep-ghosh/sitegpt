@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { and, eq, sql } from 'drizzle-orm';
-import { generateErrorMessage } from 'zod-error';
 
 import { deleteChatReqSchema, updateChatReqSchema } from '@/lib/api/schema';
 import db from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
+import { validationErrorMessage } from '@/lib/server-utils';
 
 import type { NextRequest } from 'next/server';
 
@@ -67,20 +67,16 @@ export async function PATCH(req: NextRequest, { params: _params }: RouteProps) {
     const params = updateChatReqSchema.params.safeParse(_params);
     const body = updateChatReqSchema.body.safeParse(await req.json());
 
-    const ve = !params.success
-      ? params.error
-      : !body.success
-        ? body.error
-        : false;
+    if (!params.success) {
+      const errMsg = validationErrorMessage(params.error.issues);
+      return NextResponse.json(
+        { status: 'error', message: errMsg },
+        { status: 400 }
+      );
+    }
 
-    if (ve) {
-      const errMsg = generateErrorMessage(ve.issues, {
-        maxErrors: 1,
-        delimiter: { component: ': ' },
-        code: { enabled: false },
-        path: { enabled: true, type: 'objectNotation', label: '' },
-        message: { enabled: true, label: '' }
-      });
+    if (!body.success) {
+      const errMsg = validationErrorMessage(body.error.issues);
       return NextResponse.json(
         { status: 'error', message: errMsg },
         { status: 400 }
@@ -89,9 +85,9 @@ export async function PATCH(req: NextRequest, { params: _params }: RouteProps) {
 
     const [updatedData] = await db
       .update(chatsTable)
-      .set({ siteTitle: body.data?.title!, updatedAt: sql`NOW()` })
+      .set({ siteTitle: body.data.title, updatedAt: sql`NOW()` })
       .where(
-        and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.data?.id!))
+        and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.data.id))
       )
       .returning();
 
@@ -111,7 +107,7 @@ export async function PATCH(req: NextRequest, { params: _params }: RouteProps) {
 }
 
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params: _params }: RouteProps
 ) {
   const { userId } = await auth();
@@ -127,13 +123,7 @@ export async function DELETE(
     const params = deleteChatReqSchema.safeParse(_params);
 
     if (!params.success) {
-      const errMsg = generateErrorMessage(params.error.issues, {
-        maxErrors: 1,
-        delimiter: { component: ': ' },
-        code: { enabled: false },
-        path: { enabled: true, type: 'objectNotation', label: '' },
-        message: { enabled: true, label: '' }
-      });
+      const errMsg = validationErrorMessage(params.error.issues);
       return NextResponse.json(
         { status: 'error', message: errMsg },
         { status: 400 }
@@ -143,7 +133,7 @@ export async function DELETE(
     const [deletedData] = await db
       .delete(chatsTable)
       .where(
-        and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.data?.id!))
+        and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.data.id))
       )
       .returning({ id: chatsTable.id });
 
