@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import useSWR from 'swr';
 
+import { getChats } from '@/lib/api/queries';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -40,22 +41,14 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
-import type { Chats } from '@/types';
-
 export default function AppSidebar() {
   const pathname = usePathname();
-
   const isMobile = useIsMobile();
 
   const { user } = useUser();
   const { openUserProfile, signOut } = useClerk();
 
-  const { data: chats, isLoading } = useSWR<Chats>(
-    '/api/chats',
-    (url: string) => {
-      return fetch(url).then((res) => res.json());
-    }
-  );
+  const { data: chats, isLoading } = useSWR('/api/chats', getChats);
 
   return (
     <Sidebar collapsible='icon'>
@@ -95,7 +88,7 @@ export default function AppSidebar() {
         <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
           {isLoading ? (
             <Loader className='mt-3 size-4 w-full animate-spin text-red-50' />
-          ) : chats && chats.status === 'error' ? (
+          ) : !chats ? (
             <div className='mt-2 text-center'>
               <span className='text-sm font-extralight italic'>
                 Unable to load history
@@ -106,7 +99,7 @@ export default function AppSidebar() {
               <SidebarGroupLabel>Recents</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className='gap-1.5'>
-                  {chats && chats.data.length > 0 ? (
+                  {chats.data.length > 0 ? (
                     chats.data.map((chat) => (
                       <SidebarMenuItem key={chat.id}>
                         <SidebarMenuButton

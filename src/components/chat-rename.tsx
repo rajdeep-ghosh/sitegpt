@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { mutate } from 'swr';
+import useSWRMutation from 'swr/mutation';
 
+import { updateChat } from '@/lib/api/queries';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -36,56 +38,37 @@ export default function ChatRename({
 }: ChatRenameProps) {
   const isMobile = useIsMobile();
 
+  const [title, setTitle] = useState(chat.data.siteTitle);
+
+  const { trigger, isMutating } = useSWRMutation(
+    `/api/chats/${chat.data.id}`,
+    updateChat,
+    {
+      onSuccess: () => {
+        void mutate('/api/chats');
+        onOpenChange(false);
+        toast({
+          title: 'Success',
+          description: 'Chat Renamed'
+        });
+      },
+      onError: (err) => {
+        console.error(err);
+        const msg = err instanceof Error ? err.message : 'Please try again!';
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: msg
+        });
+      }
+    }
+  );
+
   const Comp = isMobile ? Drawer : Dialog;
   const CompContent = isMobile ? DrawerContent : DialogContent;
   const CompHeader = isMobile ? DrawerHeader : DialogHeader;
   const CompTitle = isMobile ? DrawerTitle : DialogTitle;
   const CompFooter = isMobile ? DrawerFooter : DialogFooter;
-
-  const [title, setTitle] = useState(chat.data.siteTitle);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function handleSubmit() {
-    try {
-      setIsSubmitting(true);
-
-      const updateChatRes = await fetch(`/api/chats/${chat.data.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ title })
-      });
-      const body = (await updateChatRes.json()) as Chat;
-
-      switch (body.status) {
-        case 'error':
-          throw new Error(body.message);
-
-        case 'success':
-          onOpenChange(false);
-          void mutate('/api/chats');
-          toast({
-            title: 'Success',
-            description: 'Chat Renamed'
-          });
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: err.message
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: 'Please try again!'
-        });
-      }
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   return (
     <Comp open={open} onOpenChange={onOpenChange}>
@@ -106,11 +89,11 @@ export default function ChatRename({
         <CompFooter>
           <Button
             size='sm'
-            disabled={isSubmitting}
-            onClick={handleSubmit}
+            disabled={isMutating}
+            onClick={() => trigger(title)}
             className='rounded-lg text-sm'
           >
-            {isSubmitting ? <Loader2 className='animate-spin' /> : 'Save'}
+            {isMutating ? <Loader2 className='animate-spin' /> : 'Save'}
           </Button>
         </CompFooter>
       </CompContent>

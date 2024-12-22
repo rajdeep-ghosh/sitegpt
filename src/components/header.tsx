@@ -1,5 +1,7 @@
+'use client';
+
 import Link from 'next/link';
-import { auth } from '@clerk/nextjs/server';
+import { useAuth } from '@clerk/nextjs';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -7,13 +9,8 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 
 type HeaderProps = React.HTMLAttributes<HTMLElement>;
 
-export default async function Header({
-  className,
-  children,
-  ...props
-}: HeaderProps) {
-  const { userId } = await auth();
-  const isSignedIn = !!userId;
+export default function Header({ className, children, ...props }: HeaderProps) {
+  const { isSignedIn } = useAuth();
 
   return (
     <header className={cn('w-full p-4', className)} {...props}>

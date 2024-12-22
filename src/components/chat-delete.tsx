@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { mutate } from 'swr';
+import useSWRMutation from 'swr/mutation';
 
+import { deleteChat } from '@/lib/api/queries';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -37,8 +38,32 @@ export default function ChatDelete({
   chat
 }: ChatDeleteProps) {
   const isMobile = useIsMobile();
-
   const router = useRouter();
+
+  const { trigger, isMutating } = useSWRMutation(
+    `/api/chats/${chat.data.id}`,
+    deleteChat,
+    {
+      onSuccess: () => {
+        onOpenChange(false);
+        router.replace('/');
+        void mutate('/api/chats');
+        toast({
+          title: 'Success',
+          description: 'Chat Deleted'
+        });
+      },
+      onError: (err) => {
+        console.error(err);
+        const msg = err instanceof Error ? err.message : 'Please try again!';
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: msg
+        });
+      }
+    }
+  );
 
   const Comp = isMobile ? Drawer : Dialog;
   const CompContent = isMobile ? DrawerContent : DialogContent;
@@ -46,50 +71,6 @@ export default function ChatDelete({
   const CompTitle = isMobile ? DrawerTitle : DialogTitle;
   const CompDescription = isMobile ? DrawerDescription : DialogDescription;
   const CompFooter = isMobile ? DrawerFooter : DialogFooter;
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function handleSubmit() {
-    try {
-      setIsSubmitting(true);
-
-      const deleteChatRes = await fetch(`/api/chats/${chat.data.id}`, {
-        method: 'DELETE'
-      });
-      const body = (await deleteChatRes.json()) as Chat;
-
-      switch (body.status) {
-        case 'error':
-          throw new Error(body.message);
-
-        case 'success':
-          onOpenChange(false);
-          router.replace('/');
-          void mutate('/api/chats');
-          toast({
-            title: 'Success',
-            description: 'Chat Deleted'
-          });
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: err.message
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: 'Please try again!'
-        });
-      }
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   return (
     <Comp open={open} onOpenChange={onOpenChange}>
@@ -105,11 +86,11 @@ export default function ChatDelete({
           <Button
             variant='destructive'
             size='sm'
-            disabled={isSubmitting}
-            onClick={handleSubmit}
+            disabled={isMutating}
+            onClick={() => trigger()}
             className='rounded-lg text-sm'
           >
-            {isSubmitting ? <Loader2 className='animate-spin' /> : 'Delete'}
+            {isMutating ? <Loader2 className='animate-spin' /> : 'Delete'}
           </Button>
         </CompFooter>
       </CompContent>
