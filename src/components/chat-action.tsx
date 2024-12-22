@@ -25,7 +25,7 @@ import ChatRename from './chat-rename';
 import type { Chat } from '@/types';
 
 type ChatActionProps = {
-  chat: Chat['data'];
+  chat: Extract<Chat, { status: 'success' }>;
 };
 
 export default function ChatAction({ chat }: ChatActionProps) {
@@ -37,7 +37,7 @@ export default function ChatAction({ chat }: ChatActionProps) {
     <>
       <div className='flex items-center gap-2 text-sm'>
         <div className='hidden font-medium text-muted-foreground md:inline-block'>
-          {new Date(chat.createdAt).toLocaleDateString('en', {
+          {new Date(chat.data.createdAt).toLocaleDateString('en', {
             month: 'short',
             day: 'numeric'
           })}
@@ -65,7 +65,9 @@ export default function ChatAction({ chat }: ChatActionProps) {
                         <SidebarMenuButton
                           onClick={() => {
                             setCopiedToClipboard(true);
-                            void navigator.clipboard.writeText(chat.siteUrl);
+                            void navigator.clipboard.writeText(
+                              chat.data.siteUrl
+                            );
                             setTimeout(() => setCopiedToClipboard(false), 1500);
                           }}
                           className='[&>svg]:text-muted-foreground [&>svg]:transition-colors [&>svg]:[shape-rendering:crispEdges] [&>svg]:hover:text-current'

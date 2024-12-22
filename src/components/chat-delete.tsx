@@ -28,7 +28,7 @@ import type { Chat } from '@/types';
 type ChatDeleteProps = {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-  chat: Chat['data'];
+  chat: Extract<Chat, { status: 'success' }>;
 };
 
 export default function ChatDelete({
@@ -53,12 +53,10 @@ export default function ChatDelete({
     try {
       setIsSubmitting(true);
 
-      const deleteChatRes = await fetch(`/api/chats/${chat.id}`, {
+      const deleteChatRes = await fetch(`/api/chats/${chat.data.id}`, {
         method: 'DELETE'
       });
-      const body = (await deleteChatRes.json()) as
-        | { status: 'error'; message: string }
-        | Chat;
+      const body = (await deleteChatRes.json()) as Chat;
 
       switch (body.status) {
         case 'error':

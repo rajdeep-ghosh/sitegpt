@@ -26,7 +26,7 @@ import type { Chat } from '@/types';
 type ChatRenameProps = {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-  chat: Chat['data'];
+  chat: Extract<Chat, { status: 'success' }>;
 };
 
 export default function ChatRename({
@@ -42,20 +42,18 @@ export default function ChatRename({
   const CompTitle = isMobile ? DrawerTitle : DialogTitle;
   const CompFooter = isMobile ? DrawerFooter : DialogFooter;
 
-  const [title, setTitle] = useState(chat.siteTitle);
+  const [title, setTitle] = useState(chat.data.siteTitle);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit() {
     try {
       setIsSubmitting(true);
 
-      const updateChatRes = await fetch(`/api/chats/${chat.id}`, {
+      const updateChatRes = await fetch(`/api/chats/${chat.data.id}`, {
         method: 'PATCH',
         body: JSON.stringify({ title })
       });
-      const body = (await updateChatRes.json()) as
-        | { status: 'error'; message: string }
-        | Chat;
+      const body = (await updateChatRes.json()) as Chat;
 
       switch (body.status) {
         case 'error':

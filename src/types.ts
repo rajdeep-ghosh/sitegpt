@@ -1,45 +1,7 @@
-export type TCreateChatRes =
-  | {
-      status: 'success';
-      data: {
-        id: string;
-        userId: string;
-        siteTitle: string;
-        siteUrl: string;
-        createdAt: Date;
-        updatedAt: Date;
-      };
-    }
-  | {
-      status: 'error';
-      message: string;
-    };
+import type { SelectChat } from '@/lib/db/schema';
 
-export type Chats =
-  | {
-      status: 'success';
-      data: {
-        id: string;
-        userId: string;
-        siteTitle: string;
-        siteUrl: string;
-        createdAt: Date;
-        updatedAt: Date;
-      }[];
-    }
-  | {
-      status: 'error';
-      message: string;
-    };
+type SuccessState = { status: 'success' };
+type ErrorState = { status: 'error'; message: string };
 
-export type Chat = {
-  status: 'success';
-  data: {
-    id: string;
-    userId: string;
-    siteTitle: string;
-    siteUrl: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-};
+export type Chats = (SuccessState & { data: SelectChat[] }) | ErrorState;
+export type Chat = (SuccessState & { data: SelectChat }) | ErrorState;

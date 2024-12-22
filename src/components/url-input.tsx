@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 import AuthPopup from './auth-popup';
 
-import type { TCreateChatRes } from '@/types';
+import type { Chat } from '@/types';
 
 export default function URLInput() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function URLInput() {
           knowledge_src: content
         })
       });
-      const body = (await createChatRes.json()) as TCreateChatRes;
+      const body = (await createChatRes.json()) as Chat;
 
       switch (body.status) {
         case 'error':

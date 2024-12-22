@@ -25,13 +25,15 @@ export default async function ChatPage({ params }: ChatPageProps) {
   );
   if (!response.ok) return notFound();
 
-  const { data: chat } = (await response.json()) as Chat;
+  const chat = (await response.json()) as Extract<Chat, { status: 'success' }>;
 
   return (
     <>
       <Header className='sticky top-0 bg-background'>
         <div className='max-w-[60%] md:max-w-[50%]'>
-          <h4 className='truncate text-sm font-medium'>{chat.siteTitle}</h4>
+          <h4 className='truncate text-sm font-medium'>
+            {chat.data.siteTitle}
+          </h4>
         </div>
         <ChatAction chat={chat} />
       </Header>
