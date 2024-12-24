@@ -15,6 +15,8 @@ type RouteProps = {
   };
 };
 
+export const maxDuration = 25; // 25s
+
 export async function GET(req: NextRequest, { params }: RouteProps) {
   const { userId: _userId } = await auth();
   const userId = _userId ?? req.headers.get('x-userid');

@@ -14,6 +14,8 @@ import {
 
 import type { NextRequest } from 'next/server';
 
+export const maxDuration = 60; // 60s
+
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
 
