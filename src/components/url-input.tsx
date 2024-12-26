@@ -62,7 +62,11 @@ export default function URLInput() {
 
   return (
     <div className='flex w-full max-w-xl gap-3 rounded-xl border-[0.5px] border-gray-400/25 bg-muted p-3 transition-colors duration-200 focus-within:border-gray-400/50 hover:border-gray-400/50'>
+      <label htmlFor='url-input' className='sr-only'>
+        URL input
+      </label>
       <Textarea
+        id='url-input'
         ref={textareaRef}
         disabled={isMutating}
         value={content}

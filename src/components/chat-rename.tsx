@@ -77,11 +77,11 @@ export default function ChatRename({
           <CompTitle>Rename Chat</CompTitle>
         </CompHeader>
         <div className='p-4 md:p-0'>
-          <label htmlFor='newChatTitle' className='sr-only'>
+          <label htmlFor='new-chat-title' className='sr-only'>
             New chat title
           </label>
           <Input
-            id='newChatTitle'
+            id='new-chat-title'
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
