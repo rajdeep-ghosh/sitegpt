@@ -15,7 +15,8 @@ type RouteProps = {
   };
 };
 
-export const maxDuration = 25; // 25s
+// Allow this function to run for max 25 seconds
+export const maxDuration = 25;
 
 export async function GET(req: NextRequest, { params }: RouteProps) {
   const { userId: _userId } = await auth();
