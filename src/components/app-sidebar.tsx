@@ -84,7 +84,7 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className='[scrollbar-color:#3f3f46_#27272a] [scrollbar-width:thin]'>
+      <SidebarContent className='scrollbar'>
         <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
           {isLoading ? (
             <Loader className='mt-3 size-4 w-full animate-spin text-red-50' />
