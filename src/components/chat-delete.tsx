@@ -87,7 +87,7 @@ export default function ChatDelete({
             variant='destructive'
             size='sm'
             disabled={isMutating}
-            onClick={() => trigger()}
+            onClick={() => trigger().catch(console.error)}
             className='rounded-lg text-sm'
           >
             {isMutating ? <Loader2 className='animate-spin' /> : 'Delete'}

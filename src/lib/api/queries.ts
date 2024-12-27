@@ -4,11 +4,8 @@ export async function getChats(url: string) {
   const res = await fetch(url);
 
   if (!res.ok) {
-    const err = (await res.json()) as Extract<
-      Chats,
-      { status: 'error' }
-    >['message'];
-    throw new Error(err);
+    const err = (await res.json()) as Extract<Chats, { status: 'error' }>;
+    throw new Error(err.message);
   }
 
   return res.json() as unknown as Extract<Chats, { status: 'success' }>;
@@ -18,11 +15,8 @@ export async function getChat(url: string) {
   const res = await fetch(url);
 
   if (!res.ok) {
-    const err = (await res.json()) as Extract<
-      Chat,
-      { status: 'error' }
-    >['message'];
-    throw new Error(err);
+    const err = (await res.json()) as Extract<Chat, { status: 'error' }>;
+    throw new Error(err.message);
   }
 
   return res.json() as unknown as Extract<Chat, { status: 'success' }>;
@@ -35,11 +29,8 @@ export async function createChat(url: string, { arg }: { arg: string }) {
   });
 
   if (!res.ok) {
-    const err = (await res.json()) as Extract<
-      Chat,
-      { status: 'error' }
-    >['message'];
-    throw new Error(err);
+    const err = (await res.json()) as Extract<Chat, { status: 'error' }>;
+    throw new Error(err.message);
   }
 
   return res.json() as unknown as Extract<Chat, { status: 'success' }>;
@@ -52,11 +43,8 @@ export async function updateChat(url: string, { arg }: { arg: string }) {
   });
 
   if (!res.ok) {
-    const err = (await res.json()) as Extract<
-      Chat,
-      { status: 'error' }
-    >['message'];
-    throw new Error(err);
+    const err = (await res.json()) as Extract<Chat, { status: 'error' }>;
+    throw new Error(err.message);
   }
 
   return res.json() as unknown as Extract<Chat, { status: 'success' }>;
@@ -68,11 +56,8 @@ export async function deleteChat(url: string) {
   });
 
   if (!res.ok) {
-    const err = (await res.json()) as Extract<
-      Chat,
-      { status: 'error' }
-    >['message'];
-    throw new Error(err);
+    const err = (await res.json()) as Extract<Chat, { status: 'error' }>;
+    throw new Error(err.message);
   }
 
   return res.json() as unknown as Extract<Chat, { status: 'success' }>;

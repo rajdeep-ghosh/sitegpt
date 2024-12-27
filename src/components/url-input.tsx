@@ -57,7 +57,7 @@ export default function URLInput() {
       return;
     }
 
-    void trigger(content);
+    trigger(content).catch(console.error);
   }
 
   return (

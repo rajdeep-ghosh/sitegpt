@@ -90,7 +90,7 @@ export default function ChatRename({
           <Button
             size='sm'
             disabled={isMutating}
-            onClick={() => trigger(title)}
+            onClick={() => trigger(title).catch(console.error)}
             className='rounded-lg text-sm'
           >
             {isMutating ? <Loader2 className='animate-spin' /> : 'Save'}
