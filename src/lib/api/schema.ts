@@ -27,3 +27,7 @@ export const updateChatReqSchema = {
 export const deleteChatReqSchema = z.object({
   id: z.string().uuid()
 });
+
+export const useChatReqSchema = z.object({
+  id: z.string().uuid()
+});

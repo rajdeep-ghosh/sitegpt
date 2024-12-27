@@ -30,6 +30,7 @@
     "@radix-ui/react-toast": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@upstash/rag-chat": "^2.0.3",
+    "ai": "^4.0.22",
     "drizzle-orm": "^0.36.4",
     "framer-motion": "^11.11.17",
     "jsdom": "^25.0.1",
