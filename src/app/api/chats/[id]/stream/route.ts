@@ -15,6 +15,9 @@ type RouteProps = {
   };
 };
 
+// Allow this function to run for max 60 seconds
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest, { params: _params }: RouteProps) {
   const { userId } = await auth();
 
