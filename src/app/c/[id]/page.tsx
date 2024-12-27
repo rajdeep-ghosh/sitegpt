@@ -1,19 +1,35 @@
+'use client';
+
+import { useChat } from 'ai/react';
+
 import ChatInput from '@/components/chat-input';
 import ChatMessage from '@/components/chat-message';
 
-export default function ChatPage() {
+type ChatPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default function ChatPage({ params }: ChatPageProps) {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: `/api/chats/${params.id}/stream`
+  });
+
   return (
     <main className='mx-auto h-[calc(100dvh-60px)] max-w-2xl p-2'>
       <div className='flex h-full flex-col justify-between gap-4 px-4'>
         <div className='scrollbar grow space-y-4 overflow-y-auto pr-1'>
-          <ChatMessage />
-          <ChatMessage />
-          <ChatMessage />
-          <ChatMessage />
-          <ChatMessage />
+          {messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))}
         </div>
         <div className='flex flex-col items-center gap-2'>
-          <ChatInput />
+          <ChatInput
+            input={input}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+          />
           <p className='text-center text-xs text-muted-foreground'>
             SiteGPT can make mistakes. Check important info.
           </p>
