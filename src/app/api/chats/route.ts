@@ -58,7 +58,8 @@ export async function POST(req: NextRequest) {
       await ragChat.context.add({
         type: 'html',
         source: body.data.knowledge_src,
-        config: { chunkOverlap: 50, chunkSize: 200 }
+        config: { chunkOverlap: 50, chunkSize: 200 },
+        options: { metadata: { source_url: body.data.knowledge_src } }
       });
       await db
         .insert(indexedUrlsTable)
