@@ -2,6 +2,7 @@
 
 import { useChat } from 'ai/react';
 
+import ChatGreeting from '@/components/chat-greeting';
 import ChatInput from '@/components/chat-input';
 import ChatMessage from '@/components/chat-message';
 
@@ -20,9 +21,13 @@ export default function ChatPage({ params }: ChatPageProps) {
     <main className='mx-auto h-[calc(100dvh-60px)] max-w-2xl p-2'>
       <div className='flex h-full flex-col justify-between gap-4 px-4'>
         <div className='scrollbar grow space-y-4 overflow-y-auto pr-1'>
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
+          {messages.length > 0 ? (
+            messages.map((message) => (
+              <ChatMessage key={message.id} message={message} />
+            ))
+          ) : (
+            <ChatGreeting />
+          )}
         </div>
         <div className='flex flex-col items-center gap-2'>
           <ChatInput
