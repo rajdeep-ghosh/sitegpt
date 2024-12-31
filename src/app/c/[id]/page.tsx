@@ -1,11 +1,11 @@
-'use client';
+import { notFound } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';
 
-import { useChat } from 'ai/react';
+import ChatContainer from '@/components/chat-container';
+import ChatHeader from '@/components/chat-header';
+import ChatProvider from '@/components/chat-provider';
 
-import { useChatData } from '@/hooks/use-chat-data';
-import ChatGreeting from '@/components/chat-greeting';
-import ChatInput from '@/components/chat-input';
-import ChatMessage from '@/components/chat-message';
+import type { Chat } from '@/types';
 
 type ChatPageProps = {
   params: {
@@ -13,37 +13,25 @@ type ChatPageProps = {
   };
 };
 
-export default function ChatPage({ params }: ChatPageProps) {
-  const chat = useChatData();
+export default async function ChatPage({ params }: ChatPageProps) {
+  const { userId } = await auth();
 
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: `/api/chats/${params.id}/stream`,
-    body: { namespace: chat.data.siteUrl }
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}`,
+    {
+      headers: {
+        'x-userid': userId!
+      }
+    }
+  );
+  if (!res.ok) return notFound();
+
+  const chat = (await res.json()) as Extract<Chat, { status: 'success' }>;
 
   return (
-    <main className='mx-auto h-[calc(100dvh-60px)] max-w-2xl p-2'>
-      <div className='flex h-full flex-col justify-between gap-4 px-4'>
-        <div className='scrollbar grow space-y-4 overflow-y-auto pr-1'>
-          {messages.length > 0 ? (
-            messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))
-          ) : (
-            <ChatGreeting />
-          )}
-        </div>
-        <div className='flex flex-col items-center gap-2'>
-          <ChatInput
-            input={input}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-          />
-          <p className='text-center text-xs text-muted-foreground'>
-            SiteGPT can make mistakes. Check important info.
-          </p>
-        </div>
-      </div>
-    </main>
+    <ChatProvider data={chat}>
+      <ChatHeader />
+      <ChatContainer />
+    </ChatProvider>
   );
 }
