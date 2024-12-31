@@ -4,7 +4,7 @@ import { aiUseChatAdapter } from '@upstash/rag-chat/nextjs';
 
 import { useChatReqSchema } from '@/lib/api/schema';
 import { ragChat } from '@/lib/rag';
-import { validationErrorMessage } from '@/lib/server-utils';
+import { escapeLink, validationErrorMessage } from '@/lib/server-utils';
 
 import type { Message } from 'ai/react';
 import type { NextRequest } from 'next/server';
@@ -30,7 +30,10 @@ export async function POST(req: NextRequest, { params: _params }: RouteProps) {
 
   try {
     const params = useChatReqSchema.safeParse(_params);
-    const body = (await req.json()) as { messages: Message[] };
+    const body = (await req.json()) as {
+      messages: Message[];
+      namespace: string;
+    };
 
     if (!params.success) {
       const errMsg = validationErrorMessage(params.error.issues);
@@ -51,6 +54,7 @@ export async function POST(req: NextRequest, { params: _params }: RouteProps) {
 
     const response = await ragChat.chat(question, {
       sessionId: params.data.id,
+      namespace: escapeLink(body.namespace),
       streaming: true
     });
 

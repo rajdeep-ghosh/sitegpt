@@ -15,6 +15,10 @@ export async function isHTML(url: string) {
   return false;
 }
 
+export function escapeLink(link: string) {
+  return link.replace(/[:/.]/g, '_');
+}
+
 export async function extractSiteTitle(url: string) {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);

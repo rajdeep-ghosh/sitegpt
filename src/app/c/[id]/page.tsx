@@ -2,6 +2,7 @@
 
 import { useChat } from 'ai/react';
 
+import { useChatData } from '@/hooks/use-chat-data';
 import ChatGreeting from '@/components/chat-greeting';
 import ChatInput from '@/components/chat-input';
 import ChatMessage from '@/components/chat-message';
@@ -13,8 +14,11 @@ type ChatPageProps = {
 };
 
 export default function ChatPage({ params }: ChatPageProps) {
+  const chat = useChatData();
+
   const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: `/api/chats/${params.id}/stream`
+    api: `/api/chats/${params.id}/stream`,
+    body: { namespace: chat.data.siteUrl }
   });
 
   return (

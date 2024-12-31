@@ -7,6 +7,7 @@ import db from '@/lib/db';
 import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
 import {
+  escapeLink,
   extractSiteTitle,
   isHTML,
   validationErrorMessage
@@ -55,12 +56,19 @@ export async function POST(req: NextRequest) {
     });
 
     if (!!isURLIndexed === false) {
-      await ragChat.context.add({
+      const { success } = await ragChat.context.add({
         type: 'html',
         source: body.data.knowledge_src,
         config: { chunkOverlap: 50, chunkSize: 200 },
-        options: { metadata: { source_url: body.data.knowledge_src } }
+        options: {
+          namespace: escapeLink(body.data.knowledge_src),
+          metadata: {
+            source_url: body.data.knowledge_src
+          }
+        }
       });
+      if (!success) throw new Error('Error adding context');
+
       await db
         .insert(indexedUrlsTable)
         .values({ url: body.data.knowledge_src });
