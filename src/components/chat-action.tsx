@@ -1,8 +1,7 @@
-'use client';
-
 import { useState } from 'react';
 import { Check, Ellipsis, Link, PenLine, Trash } from 'lucide-react';
 
+import { useChatData } from '@/hooks/use-chat-data';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -22,13 +21,9 @@ import {
 import ChatDelete from './chat-delete';
 import ChatRename from './chat-rename';
 
-import type { Chat } from '@/types';
+export default function ChatAction() {
+  const chat = useChatData();
 
-type ChatActionProps = {
-  chat: Extract<Chat, { status: 'success' }>;
-};
-
-export default function ChatAction({ chat }: ChatActionProps) {
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [openChatRename, setOpenChatRename] = useState(false);
   const [openChatDelete, setOpenChatDelete] = useState(false);
@@ -102,16 +97,8 @@ export default function ChatAction({ chat }: ChatActionProps) {
           </PopoverContent>
         </Popover>
       </div>
-      <ChatRename
-        open={openChatRename}
-        onOpenChange={setOpenChatRename}
-        chat={chat}
-      />
-      <ChatDelete
-        open={openChatDelete}
-        onOpenChange={setOpenChatDelete}
-        chat={chat}
-      />
+      <ChatRename open={openChatRename} onOpenChange={setOpenChatRename} />
+      <ChatDelete open={openChatDelete} onOpenChange={setOpenChatDelete} />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { deleteChat } from '@/lib/api/queries';
+import { useChatData } from '@/hooks/use-chat-data';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -24,21 +25,15 @@ import {
   DrawerTitle
 } from '@/components/ui/drawer';
 
-import type { Chat } from '@/types';
-
 type ChatDeleteProps = {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-  chat: Extract<Chat, { status: 'success' }>;
 };
 
-export default function ChatDelete({
-  open,
-  onOpenChange,
-  chat
-}: ChatDeleteProps) {
-  const isMobile = useIsMobile();
+export default function ChatDelete({ open, onOpenChange }: ChatDeleteProps) {
   const router = useRouter();
+  const isMobile = useIsMobile();
+  const chat = useChatData();
 
   const { trigger, isMutating } = useSWRMutation(
     `/api/chats/${chat.data.id}`,

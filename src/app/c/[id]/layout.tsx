@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 
 import ChatHeader from '@/components/chat-header';
+import ChatProvider from '@/components/chat-provider';
 
 import type { Chat } from '@/types';
 
@@ -31,9 +32,9 @@ export default async function ChatLayout({
   const chat = (await res.json()) as Extract<Chat, { status: 'success' }>;
 
   return (
-    <>
-      <ChatHeader chat={chat} />
+    <ChatProvider data={chat}>
+      <ChatHeader />
       {children}
-    </>
+    </ChatProvider>
   );
 }
