@@ -1,4 +1,5 @@
 import { BackgroundLines } from '@/components/ui/background-lines';
+import Footer from '@/components/footer';
 import Header from '@/components/header';
 import URLInput from '@/components/url-input';
 
@@ -15,6 +16,7 @@ export default function HomePage() {
           <URLInput />
         </div>
       </main>
+      <Footer />
     </>
   );
 }
