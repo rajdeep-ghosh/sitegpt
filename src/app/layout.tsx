@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   }
 };
 
-export default async function RootLayout({
+export default async function HomeLayout({
   children
 }: React.PropsWithChildren) {
   const cookieStore = cookies();
