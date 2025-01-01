@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   description: 'Question the web',
   authors: {
     name: 'Rajdeep Ghosh',
-    url: 'https://github.com/rajdeep-ghosh'
+    url: 'https://x.com/rajdeepghosh__'
   },
   icons: {
     icon: [
