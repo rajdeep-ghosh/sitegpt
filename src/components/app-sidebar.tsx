@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useClerk, useUser } from '@clerk/nextjs';
-import { Avatar } from '@radix-ui/react-avatar';
 import {
   ChevronsUpDown,
   Loader,
@@ -16,7 +15,7 @@ import useSWR from 'swr';
 
 import { getChats } from '@/lib/api/queries';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -142,13 +141,12 @@ export default function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size='lg' tooltip='Profile'>
-                  <Avatar className='size-8'>
+                  <Avatar className='size-8 rounded'>
                     <AvatarImage
                       src={user?.imageUrl}
                       alt={user?.fullName ?? 'avatar'}
-                      className='rounded'
                     />
-                    <AvatarFallback className='rounded uppercase'>
+                    <AvatarFallback className='uppercase'>
                       {`${user?.firstName?.charAt(0)}${user?.lastName?.charAt(0)}`}
                     </AvatarFallback>
                   </Avatar>
