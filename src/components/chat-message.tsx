@@ -12,7 +12,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
   const { user } = useUser();
 
   return (
-    <div className='flex gap-3'>
+    <div className='flex items-start gap-3'>
       {message.role === 'user' ? (
         <Avatar className='size-7 rounded-lg'>
           <AvatarImage src={user?.imageUrl} alt={user?.fullName ?? 'avatar'} />
@@ -26,7 +26,12 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           <AvatarFallback>SiteGPT</AvatarFallback>
         </Avatar>
       )}
-      <div className='text-sm leading-6'>{message.content}</div>
+      <div className='-mt-1 flex flex-col gap-1.5 text-sm leading-6'>
+        <span className='text-sidebar-primary-foreground'>
+          {message.role === 'user' ? 'You' : 'SiteGPT'}
+        </span>
+        <p>{message.content}</p>
+      </div>
     </div>
   );
 }
