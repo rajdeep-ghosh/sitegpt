@@ -27,9 +27,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
         </Avatar>
       )}
       <div className='-mt-1 flex flex-col gap-1.5 text-sm leading-6'>
-        <span className='text-sidebar-primary-foreground'>
-          {message.role === 'user' ? 'You' : 'SiteGPT'}
-        </span>
+        <span>{message.role === 'user' ? 'You' : 'SiteGPT'}</span>
         <p>{message.content}</p>
       </div>
     </div>
