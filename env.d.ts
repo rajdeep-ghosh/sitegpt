@@ -4,5 +4,7 @@ namespace NodeJS {
     NEXT_PUBLIC_URL: string;
     DB_URL: string;
     DB_POOL_URL: string;
+    KV_URL: string;
+    KV_TOKEN: string;
   }
 }
