@@ -5,8 +5,7 @@ import ChatContainer from '@/components/chat-container';
 import ChatHeader from '@/components/chat-header';
 import ChatProvider from '@/components/chat-provider';
 
-import type { Message } from 'ai/react';
-import type { Chat } from '@/types';
+import type { Chat, Messages } from '@/types';
 
 type ChatPageProps = {
   params: {
@@ -38,10 +37,10 @@ export default async function ChatPage({ params }: ChatPageProps) {
   if (!msgRes.ok) return notFound();
 
   const chat = (await chatRes.json()) as Extract<Chat, { status: 'success' }>;
-  const messages = (await msgRes.json()) as {
-    status: 'success';
-    data: Message[];
-  };
+  const messages = (await msgRes.json()) as Extract<
+    Messages,
+    { status: 'success' }
+  >;
 
   return (
     <ChatProvider data={chat}>
