@@ -6,6 +6,7 @@ import { createChatReqSchema } from '@/lib/api/schema';
 import db from '@/lib/db';
 import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
+import { ratelimit } from '@/lib/ratelimit';
 import {
   escapeLink,
   extractSiteTitle,
@@ -39,6 +40,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const { limit, remaining, reset, success } =
+      await ratelimit.chat.create.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
+      );
+    }
+
     const isURLSupported = await isHTML(body.data.knowledge_src);
     if (!isURLSupported) {
       return NextResponse.json(
@@ -46,7 +62,7 @@ export async function POST(req: NextRequest) {
           status: 'error',
           message: 'The provided URL does not point to an HTML document'
         },
-        { status: 415 }
+        { status: 415, headers: ratelimitHeaders }
       );
     }
 
@@ -86,7 +102,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { status: 'success', data: newChat },
-      { status: 201 }
+      { status: 201, headers: ratelimitHeaders }
     );
   } catch (err) {
     if (err instanceof Error) {
@@ -113,12 +129,30 @@ export async function GET() {
   }
 
   try {
+    const { limit, remaining, reset, success } =
+      await ratelimit.chat.read.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
+      );
+    }
+
     const chats = await db.query.chatsTable.findMany({
       where: eq(chatsTable.userId, userId),
       orderBy: [desc(chatsTable.createdAt)]
     });
 
-    return NextResponse.json({ status: 'success', data: chats });
+    return NextResponse.json(
+      { status: 'success', data: chats },
+      { headers: ratelimitHeaders }
+    );
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(

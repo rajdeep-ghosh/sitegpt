@@ -5,6 +5,7 @@ import { and, eq } from 'drizzle-orm';
 import db from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
+import { ratelimit } from '@/lib/ratelimit';
 
 import type { NextRequest } from 'next/server';
 
@@ -28,6 +29,21 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
   }
 
   try {
+    const { limit, remaining, reset, success } =
+      await ratelimit.messages.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
+      );
+    }
+
     const chat = await db.query.chatsTable.findFirst({
       where: and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.id))
     });
@@ -35,18 +51,21 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
     if (!chat) {
       return NextResponse.json(
         { status: 'error', message: 'Not Found' },
-        { status: 404 }
+        { status: 404, headers: ratelimitHeaders }
       );
     }
 
-    const limit = searchParams.get('limit');
+    const amount = searchParams.get('limit');
 
     const messages = await ragChat.history.getMessages({
       sessionId: params.id,
-      amount: limit ? parseInt(limit) : undefined
+      amount: amount ? parseInt(amount) : undefined
     });
 
-    return NextResponse.json({ status: 'success', data: messages });
+    return NextResponse.json(
+      { status: 'success', data: messages },
+      { headers: ratelimitHeaders }
+    );
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(

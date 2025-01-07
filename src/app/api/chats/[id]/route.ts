@@ -5,6 +5,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { deleteChatReqSchema, updateChatReqSchema } from '@/lib/api/schema';
 import db from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
+import { ratelimit } from '@/lib/ratelimit';
 import { validationErrorMessage } from '@/lib/server-utils';
 
 import type { NextRequest } from 'next/server';
@@ -30,6 +31,21 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
   }
 
   try {
+    const { limit, remaining, reset, success } =
+      await ratelimit.chat.read.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
+      );
+    }
+
     const chat = await db.query.chatsTable.findFirst({
       where: and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.id))
     });
@@ -37,11 +53,14 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
     if (!chat) {
       return NextResponse.json(
         { status: 'error', message: 'Not Found' },
-        { status: 404 }
+        { status: 404, headers: ratelimitHeaders }
       );
     }
 
-    return NextResponse.json({ status: 'success', data: chat });
+    return NextResponse.json(
+      { status: 'success', data: chat },
+      { headers: ratelimitHeaders }
+    );
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(
@@ -86,6 +105,21 @@ export async function PATCH(req: NextRequest, { params: _params }: RouteProps) {
       );
     }
 
+    const { limit, remaining, reset, success } =
+      await ratelimit.chat.update.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
+      );
+    }
+
     const [updatedData] = await db
       .update(chatsTable)
       .set({ siteTitle: body.data.title, updatedAt: sql`NOW()` })
@@ -94,7 +128,10 @@ export async function PATCH(req: NextRequest, { params: _params }: RouteProps) {
       )
       .returning();
 
-    return NextResponse.json({ status: 'success', data: updatedData });
+    return NextResponse.json(
+      { status: 'success', data: updatedData },
+      { headers: ratelimitHeaders }
+    );
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(
@@ -133,6 +170,21 @@ export async function DELETE(
       );
     }
 
+    const { limit, remaining, reset, success } =
+      await ratelimit.chat.delete.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
+      );
+    }
+
     const [deletedData] = await db
       .delete(chatsTable)
       .where(
@@ -140,7 +192,10 @@ export async function DELETE(
       )
       .returning({ id: chatsTable.id });
 
-    return NextResponse.json({ status: 'success', data: deletedData });
+    return NextResponse.json(
+      { status: 'success', data: deletedData },
+      { headers: ratelimitHeaders }
+    );
   } catch (err) {
     if (err instanceof Error) {
       return NextResponse.json(

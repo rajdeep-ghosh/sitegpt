@@ -10,4 +10,9 @@ export const kv = new Redis({
   token: process.env.KV_TOKEN
 });
 
+export const rl = new Redis({
+  url: process.env.RL_URL,
+  token: process.env.RL_TOKEN
+});
+
 export default db;

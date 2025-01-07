@@ -6,5 +6,7 @@ namespace NodeJS {
     DB_POOL_URL: string;
     KV_URL: string;
     KV_TOKEN: string;
+    RL_URL: string;
+    RL_TOKEN: string;
   }
 }

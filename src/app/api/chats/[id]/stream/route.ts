@@ -4,6 +4,7 @@ import { aiUseChatAdapter } from '@upstash/rag-chat/nextjs';
 
 import { useChatReqSchema } from '@/lib/api/schema';
 import { ragChat } from '@/lib/rag';
+import { ratelimit } from '@/lib/ratelimit';
 import { escapeLink, validationErrorMessage } from '@/lib/server-utils';
 
 import type { Message } from 'ai/react';
@@ -49,6 +50,21 @@ export async function POST(req: NextRequest, { params: _params }: RouteProps) {
       return NextResponse.json(
         { status: 'error', message: 'Invalid Body' },
         { status: 400 }
+      );
+    }
+
+    const { limit, remaining, reset, success } =
+      await ratelimit.stream.limit(userId);
+    const ratelimitHeaders = {
+      'RateLimit-Limit': limit.toString(),
+      'RateLimit-Remaining': remaining.toString(),
+      'RateLimit-Reset': reset.toString()
+    };
+
+    if (!success) {
+      return NextResponse.json(
+        { status: 'error', message: 'Rate limit exceeded' },
+        { status: 429, headers: ratelimitHeaders }
       );
     }
 
