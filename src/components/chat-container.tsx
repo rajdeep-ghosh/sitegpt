@@ -8,12 +8,19 @@ import ChatGreeting from './chat-greeting';
 import ChatInput from './chat-input';
 import ChatMessage from './chat-message';
 
-export default function ChatContainer() {
+import type { Message } from 'ai/react';
+
+type ChatContainerProps = {
+  initialMessages: Message[];
+};
+
+export default function ChatContainer({ initialMessages }: ChatContainerProps) {
   const chat = useChatData();
 
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: `/api/chats/${chat.data.id}/stream`,
-    body: { namespace: chat.data.siteUrl }
+    body: { namespace: chat.data.siteUrl },
+    initialMessages
   });
 
   return (

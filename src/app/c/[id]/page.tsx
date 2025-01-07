@@ -5,6 +5,7 @@ import ChatContainer from '@/components/chat-container';
 import ChatHeader from '@/components/chat-header';
 import ChatProvider from '@/components/chat-provider';
 
+import type { Message } from 'ai/react';
 import type { Chat } from '@/types';
 
 type ChatPageProps = {
@@ -16,7 +17,7 @@ type ChatPageProps = {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { userId } = await auth();
 
-  const res = await fetch(
+  const chatRes = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}`,
     {
       headers: {
@@ -24,14 +25,28 @@ export default async function ChatPage({ params }: ChatPageProps) {
       }
     }
   );
-  if (!res.ok) return notFound();
+  if (!chatRes.ok) return notFound();
 
-  const chat = (await res.json()) as Extract<Chat, { status: 'success' }>;
+  const msgRes = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages`,
+    {
+      headers: {
+        'x-userid': userId!
+      }
+    }
+  );
+  if (!msgRes.ok) return notFound();
+
+  const chat = (await chatRes.json()) as Extract<Chat, { status: 'success' }>;
+  const messages = (await msgRes.json()) as {
+    status: 'success';
+    data: Message[];
+  };
 
   return (
     <ChatProvider data={chat}>
       <ChatHeader />
-      <ChatContainer />
+      <ChatContainer initialMessages={messages.data} />
     </ChatProvider>
   );
 }
