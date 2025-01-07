@@ -15,6 +15,8 @@ type RouteProps = {
 };
 
 export async function GET(req: NextRequest, { params }: RouteProps) {
+  const { searchParams } = req.nextUrl;
+
   const { userId: _userId } = await auth();
   const userId = _userId ?? req.headers.get('x-userid');
 
@@ -37,8 +39,11 @@ export async function GET(req: NextRequest, { params }: RouteProps) {
       );
     }
 
+    const limit = searchParams.get('limit');
+
     const messages = await ragChat.history.getMessages({
-      sessionId: params.id
+      sessionId: params.id,
+      amount: limit ? parseInt(limit) : undefined
     });
 
     return NextResponse.json({ status: 'success', data: messages });
