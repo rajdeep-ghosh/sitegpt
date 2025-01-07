@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { desc, eq } from 'drizzle-orm';
 
 import { createChatReqSchema } from '@/lib/api/schema';
-import db from '@/lib/db';
+import { db } from '@/lib/db';
 import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
 import { ratelimit } from '@/lib/ratelimit';

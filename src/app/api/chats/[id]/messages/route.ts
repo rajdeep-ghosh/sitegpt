@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
 
-import db from '@/lib/db';
+import { db } from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
 import { ratelimit } from '@/lib/ratelimit';
