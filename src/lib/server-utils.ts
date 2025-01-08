@@ -1,6 +1,7 @@
 import { JSDOM } from 'jsdom';
 import { generateErrorMessage } from 'zod-error';
 
+import type { Index } from '@upstash/vector';
 import type { ZodIssue } from 'zod';
 import type { ErrorMessageOptions } from 'zod-error';
 
@@ -41,4 +42,21 @@ export async function extractSiteTitle(url: string) {
   const { document } = new JSDOM(html).window;
   const title = document.querySelector('title')?.textContent ?? 'Untitled';
   return title;
+}
+
+export async function awaitUntilIndexed(client: Index, timeoutMillis = 20_000) {
+  const start = performance.now();
+
+  do {
+    const info = await client.info();
+    if (info.pendingVectorCount === 0) {
+      // OK, nothing more to index.
+      return;
+    }
+
+    // Not indexed yet, sleep a bit and check again if the timeout is not passed.
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  } while (performance.now() < start + timeoutMillis);
+
+  throw new Error(`Timeout: Indexing is not completed in ${timeoutMillis} ms.`);
 }

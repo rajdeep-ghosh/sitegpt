@@ -3,11 +3,12 @@ import { auth } from '@clerk/nextjs/server';
 import { desc, eq } from 'drizzle-orm';
 
 import { createChatReqSchema } from '@/lib/api/schema';
-import { db, kv } from '@/lib/db';
+import { db, kv, vc } from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
 import { ratelimit } from '@/lib/ratelimit';
 import {
+  awaitUntilIndexed,
   escapeLink,
   extractSiteTitle,
   isHTML,
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest) {
           }
         }
       });
+      await awaitUntilIndexed(vc);
       if (!success) throw new Error('Error adding context');
 
       await kv.sadd('indexed_urls', body.data.knowledge_src);
