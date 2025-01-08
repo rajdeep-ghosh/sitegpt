@@ -26,8 +26,9 @@ export default async function ChatPage({ params }: ChatPageProps) {
   );
   if (!chatRes.ok) return notFound();
 
+  // TODO: temporarily set large limit to fetch all messages. fix later to use pagination
   const msgRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages`,
+    `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages?limit=100`,
     {
       headers: {
         'x-userid': userId!
