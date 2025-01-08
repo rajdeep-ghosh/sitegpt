@@ -5,6 +5,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { deleteChatReqSchema, updateChatReqSchema } from '@/lib/api/schema';
 import { db } from '@/lib/db';
 import { chatsTable } from '@/lib/db/schema';
+import { ragChat } from '@/lib/rag';
 import { ratelimit } from '@/lib/ratelimit';
 import { validationErrorMessage } from '@/lib/server-utils';
 
@@ -191,6 +192,15 @@ export async function DELETE(
         and(eq(chatsTable.userId, userId), eq(chatsTable.id, params.data.id))
       )
       .returning({ id: chatsTable.id });
+
+    try {
+      await ragChat.history.deleteMessages({ sessionId: params.data.id });
+    } catch (err) {
+      console.error(
+        'Failed to delete chat history, but main deletion succeeded:',
+        err
+      );
+    }
 
     return NextResponse.json(
       { status: 'success', data: deletedData },
