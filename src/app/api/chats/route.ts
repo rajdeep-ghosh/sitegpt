@@ -3,8 +3,8 @@ import { auth } from '@clerk/nextjs/server';
 import { desc, eq } from 'drizzle-orm';
 
 import { createChatReqSchema } from '@/lib/api/schema';
-import { db } from '@/lib/db';
-import { chatsTable, indexedUrlsTable } from '@/lib/db/schema';
+import { db, kv } from '@/lib/db';
+import { chatsTable } from '@/lib/db/schema';
 import { ragChat } from '@/lib/rag';
 import { ratelimit } from '@/lib/ratelimit';
 import {
@@ -66,12 +66,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isURLIndexed = await db.query.indexedUrlsTable.findFirst({
-      where: eq(indexedUrlsTable.url, body.data.knowledge_src),
-      columns: { id: true }
-    });
+    const isURLIndexed = await kv.sismember(
+      'indexed_urls',
+      body.data.knowledge_src
+    );
 
-    if (!!isURLIndexed === false) {
+    if (!isURLIndexed) {
       const { success } = await ragChat.context.add({
         type: 'html',
         source: body.data.knowledge_src,
@@ -85,9 +85,7 @@ export async function POST(req: NextRequest) {
       });
       if (!success) throw new Error('Error adding context');
 
-      await db
-        .insert(indexedUrlsTable)
-        .values({ url: body.data.knowledge_src });
+      await kv.sadd('indexed_urls', body.data.knowledge_src);
     }
 
     const siteTitle = await extractSiteTitle(body.data.knowledge_src);

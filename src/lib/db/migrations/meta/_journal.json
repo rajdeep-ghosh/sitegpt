@@ -15,6 +15,13 @@
       "when": 1733121250673,
       "tag": "0001_concerned_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736348849615,
+      "tag": "0002_numerous_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }
