@@ -5,6 +5,8 @@ export const env = createEnv({
   server: {
     DB_URL: z.string().min(1),
     DB_POOL_URL: z.string().min(1),
+    VC_URL: z.string().min(1),
+    VC_TOKEN: z.string().min(1),
     KV_URL: z.string().min(1),
     KV_TOKEN: z.string().min(1),
     RL_URL: z.string().min(1),
