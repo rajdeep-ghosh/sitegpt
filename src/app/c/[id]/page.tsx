@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
 
+import { env } from '@/lib/env';
 import ChatContainer from '@/components/chat-container';
 import ChatHeader from '@/components/chat-header';
 import ChatProvider from '@/components/chat-provider';
@@ -17,14 +18,14 @@ export default async function ChatPage({ params }: ChatPageProps) {
   const { userId } = await auth();
 
   const [chatRes, msgRes] = await Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}`, {
+    fetch(`${env.NEXT_PUBLIC_URL}/api/chats/${params.id}`, {
       headers: {
         'x-userid': userId!
       }
     }),
     fetch(
       // TODO: temporarily set large limit to fetch all messages. fix later to use pagination
-      `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages?limit=100`,
+      `${env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages?limit=100`,
       {
         headers: {
           'x-userid': userId!

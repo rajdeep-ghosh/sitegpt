@@ -31,11 +31,11 @@
             "group": "builtin",
             "position": "before"
           },
-          {
-            "pattern": "@/lib/env",
-            "group": "unknown",
-            "position": "after"
-          },
+          // {
+          //   "pattern": "@/lib/env",
+          //   "group": "unknown",
+          //   "position": "after"
+          // },
           {
             "pattern": "@/lib/**",
             "group": "external",
