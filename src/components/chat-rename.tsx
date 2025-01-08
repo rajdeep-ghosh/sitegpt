@@ -43,6 +43,7 @@ export default function ChatRename({ open, onOpenChange }: ChatRenameProps) {
         void mutate('/api/chats');
         onOpenChange(false);
         toast({
+          variant: 'constructive',
           title: 'Success',
           description: 'Chat Renamed'
         });

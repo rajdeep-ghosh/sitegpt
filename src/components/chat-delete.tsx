@@ -44,6 +44,7 @@ export default function ChatDelete({ open, onOpenChange }: ChatDeleteProps) {
         router.replace('/');
         void mutate('/api/chats');
         toast({
+          variant: 'constructive',
           title: 'Success',
           description: 'Chat Deleted'
         });
