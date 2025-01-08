@@ -16,26 +16,24 @@ type ChatPageProps = {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { userId } = await auth();
 
-  const chatRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}`,
-    {
+  const [chatRes, msgRes] = await Promise.all([
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}`, {
       headers: {
         'x-userid': userId!
       }
-    }
-  );
-  if (!chatRes.ok) return notFound();
+    }),
+    fetch(
+      // TODO: temporarily set large limit to fetch all messages. fix later to use pagination
+      `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages?limit=100`,
+      {
+        headers: {
+          'x-userid': userId!
+        }
+      }
+    )
+  ]);
 
-  // TODO: temporarily set large limit to fetch all messages. fix later to use pagination
-  const msgRes = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages?limit=100`,
-    {
-      headers: {
-        'x-userid': userId!
-      }
-    }
-  );
-  if (!msgRes.ok) return notFound();
+  if (!chatRes.ok || !msgRes.ok) return notFound();
 
   const chat = (await chatRes.json()) as Extract<Chat, { status: 'success' }>;
   const messages = (await msgRes.json()) as Extract<
