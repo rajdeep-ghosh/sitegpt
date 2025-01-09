@@ -68,6 +68,16 @@ module.exports = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
         }
+      },
+      animation: {
+        gradient: 'gradient 8s linear infinite'
+      },
+      keyframes: {
+        gradient: {
+          to: {
+            backgroundPosition: 'var(--bg-size) 0'
+          }
+        }
       }
     }
   },
