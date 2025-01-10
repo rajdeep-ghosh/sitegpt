@@ -70,7 +70,7 @@ export default function URLInput() {
         ref={textareaRef}
         disabled={isMutating}
         value={content}
-        placeholder='Enter a url...'
+        placeholder='Enter a url to get started...'
         onChange={(e) => setContent(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
