@@ -11,7 +11,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --env-file=.env.local src/lib/db/migrate.ts",
     "lint": "next lint",
-    "format:check": "prettier --check ./src",
+    "format": "prettier --check ./src",
     "format:fix": "prettier --write ./src --ignore-unknown",
     "prepare": "husky install"
   },
