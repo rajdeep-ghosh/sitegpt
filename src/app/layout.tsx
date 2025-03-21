@@ -59,6 +59,14 @@ export const metadata: Metadata = {
       sizes: '180x180'
     }
   },
+  openGraph: {
+    type: 'website',
+    siteName: 'SiteGPT',
+    countryName: 'India'
+  },
+  twitter: {
+    site: 'SiteGPT'
+  },
   manifest: '/site.webmanifest',
   appleWebApp: {
     title: 'SiteGPT'
