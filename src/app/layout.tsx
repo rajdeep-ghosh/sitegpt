@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     name: 'Rajdeep Ghosh',
     url: 'https://x.com/rajdeepghosh__'
   },
+  metadataBase:
+    process.env.NODE_ENV === 'production'
+      ? process.env.VERCEL_ENV === 'production'
+        ? new URL(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`)
+        : new URL(`https://${process.env.VERCEL_BRANCH_URL}`)
+      : new URL('http://localhost:3000'),
   icons: {
     icon: [
       {
@@ -52,6 +58,14 @@ export const metadata: Metadata = {
       url: '/apple-touch-icon.png',
       sizes: '180x180'
     }
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'SiteGPT',
+    countryName: 'India'
+  },
+  twitter: {
+    site: 'SiteGPT'
   },
   manifest: '/site.webmanifest',
   appleWebApp: {
