@@ -12,9 +12,9 @@ export default function DemoCredentials() {
 
   return (
     <div className='space-y-1.5 text-sm text-muted-foreground'>
-      <h5>To try things out use these credentials:</h5>
+      <p>To try things out use these credentials:</p>
       <div>
-        <p className='flex items-center justify-between'>
+        <div className='flex items-center justify-between'>
           <span>Email:</span>
           <div className='flex items-center gap-1'>
             <span>{DEMO_ACCOUNT_EMAIL}</span>
@@ -33,8 +33,8 @@ export default function DemoCredentials() {
               )}
             </div>
           </div>
-        </p>
-        <p className='flex items-center justify-between'>
+        </div>
+        <div className='flex items-center justify-between'>
           <span>Password:</span>
           <div className='flex items-center gap-1'>
             <span>{DEMO_ACCOUNT_PASSWORD}</span>
@@ -53,7 +53,7 @@ export default function DemoCredentials() {
               )}
             </div>
           </div>
-        </p>
+        </div>
       </div>
     </div>
   );
