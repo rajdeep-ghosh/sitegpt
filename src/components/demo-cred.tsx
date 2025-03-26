@@ -24,7 +24,7 @@ export default function DemoCredentials() {
 
   return (
     <Dialog>
-      <DialogTrigger className='flex items-center text-sm text-muted-foreground'>
+      <DialogTrigger className='flex items-center text-sm text-muted-foreground underline decoration-dotted underline-offset-2'>
         <span>To try things out use these credentials</span>
         <ChevronRight className='size-4' />
       </DialogTrigger>
