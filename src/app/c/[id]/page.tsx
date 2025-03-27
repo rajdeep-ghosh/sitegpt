@@ -20,7 +20,9 @@ export default async function ChatPage({ params }: ChatPageProps) {
   const [chatRes, msgRes] = await Promise.all([
     fetch(`${env.NEXT_PUBLIC_URL}/api/chats/${params.id}`, {
       headers: {
-        'x-userid': userId!
+        'x-userid': userId!,
+        'x-vercel-protection-bypass':
+          process.env.VERCEL_AUTOMATION_BYPASS_SECRET ?? 'default'
       }
     }),
     fetch(
@@ -28,7 +30,9 @@ export default async function ChatPage({ params }: ChatPageProps) {
       `${env.NEXT_PUBLIC_URL}/api/chats/${params.id}/messages?limit=100`,
       {
         headers: {
-          'x-userid': userId!
+          'x-userid': userId!,
+          'x-vercel-protection-bypass':
+            process.env.VERCEL_AUTOMATION_BYPASS_SECRET ?? 'default'
         }
       }
     )
