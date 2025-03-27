@@ -1,6 +1,13 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
+const LIVE_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.VERCEL_ENV === 'production'
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : `https://${process.env.VERCEL_BRANCH_URL}`
+    : 'http://localhost:3000';
+
 export const env = createEnv({
   server: {
     DB_URL: z.string().min(1),
@@ -19,7 +26,7 @@ export const env = createEnv({
   },
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   experimental__runtimeEnv: {
-    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL ?? LIVE_URL,
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL
   }
