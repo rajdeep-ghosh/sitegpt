@@ -1,9 +1,12 @@
-import { RAGChat, upstash } from '@upstash/rag-chat';
+import { RAGChat, togetherai } from '@upstash/rag-chat';
 
 import { kv, vc } from '@/lib/db';
+import { env } from '@/lib/env';
 
 export const ragChat = new RAGChat({
-  model: upstash('meta-llama/Meta-Llama-3-8B-Instruct'),
+  model: togetherai('meta-llama/Llama-3.3-70B-Instruct-Turbo-Free', {
+    apiKey: env.TOGETHER_AI_KEY
+  }),
   vector: vc,
   redis: kv,
   promptFn: ({ context, question, chatHistory }) =>

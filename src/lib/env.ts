@@ -17,7 +17,8 @@ export const env = createEnv({
     KV_URL: z.string().min(1),
     KV_TOKEN: z.string().min(1),
     RL_URL: z.string().min(1),
-    RL_TOKEN: z.string().min(1)
+    RL_TOKEN: z.string().min(1),
+    TOGETHER_AI_KEY: z.string().min(1)
   },
   client: {
     NEXT_PUBLIC_URL: z.string().min(1),
