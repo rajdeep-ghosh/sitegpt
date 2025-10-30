@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useClerk, useUser } from '@clerk/nextjs';
 import {
-  ChevronsUpDown,
-  Loader,
-  LogOut,
-  MessageCirclePlus,
-  Settings
+  ChevronsUpDownIcon,
+  LoaderIcon,
+  LogOutIcon,
+  MessageCirclePlusIcon,
+  SettingsIcon
 } from 'lucide-react';
 import useSWR from 'swr';
 
@@ -76,7 +76,7 @@ export default function AppSidebar() {
               className='font-medium group-data-[state=expanded]:justify-center'
             >
               <Link href='/'>
-                <MessageCirclePlus className='size-4' />
+                <MessageCirclePlusIcon className='size-4' />
                 <span>New Chat</span>
               </Link>
             </SidebarMenuButton>
@@ -86,7 +86,7 @@ export default function AppSidebar() {
       <SidebarContent className='scrollbar'>
         <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
           {isLoading ? (
-            <Loader className='mt-3 size-4 w-full animate-spin text-red-50' />
+            <LoaderIcon className='mt-3 size-4 w-full animate-spin text-red-50' />
           ) : !chats ? (
             <div className='mt-2 text-center'>
               <span className='text-sm font-extralight italic'>
@@ -158,7 +158,7 @@ export default function AppSidebar() {
                       {user?.primaryEmailAddress?.emailAddress}
                     </span>
                   </div>
-                  <ChevronsUpDown className='ml-auto size-4 group-data-[state=collapsed]:hidden' />
+                  <ChevronsUpDownIcon className='ml-auto size-4 group-data-[state=collapsed]:hidden' />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -195,14 +195,14 @@ export default function AppSidebar() {
                     onClick={() => openUserProfile()}
                     className='cursor-pointer'
                   >
-                    <Settings />
+                    <SettingsIcon />
                     Manage Account
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => signOut()}
                     className='cursor-pointer'
                   >
-                    <LogOut />
+                    <LogOutIcon />
                     Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuGroup>

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUpIcon } from 'lucide-react';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -88,7 +88,7 @@ export default function URLInput() {
           hidden: content.length === 0
         })}
       >
-        <ArrowUp className='size-4' />
+        <ArrowUpIcon className='size-4' />
       </Button>
 
       <AuthPopup open={showAuthPopup} onOpenChange={setShowAuthPopup} />

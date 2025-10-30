@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ChevronRight, Github } from 'lucide-react';
+import { ChevronRightIcon, GithubIcon } from 'lucide-react';
 
 import { AnimatedGradientText } from '@/components/ui/animated-gradient-text';
 import { BackgroundLines } from '@/components/ui/background-lines';
@@ -16,11 +16,11 @@ export default function HomePage() {
         <div className='-mt-5 flex h-screen flex-col items-center justify-center gap-10'>
           <Link href='https://github.com/rajdeep-ghosh/sitegpt' target='_blank'>
             <AnimatedGradientText>
-              <Github className='size-4' />
+              <GithubIcon className='size-4' />
               <span className='ml-2 inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent'>
                 Star on Github
               </span>
-              <ChevronRight className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
+              <ChevronRightIcon className='ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5' />
             </AnimatedGradientText>
           </Link>
           <h1 className='font-sentient text-3xl font-medium sm:text-5xl'>

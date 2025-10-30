@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUpIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -56,7 +56,7 @@ export default function ChatInput({
               hidden: input.length === 0
             })}
           >
-            <ArrowUp className='size-4' />
+            <ArrowUpIcon className='size-4' />
           </Button>
         </div>
       </form>

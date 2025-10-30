@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, ChevronRight, Copy } from 'lucide-react';
+import { CheckIcon, ChevronRightIcon, CopyIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,7 +26,7 @@ export default function DemoCredentials() {
     <Dialog>
       <DialogTrigger className='flex items-center text-sm text-muted-foreground underline decoration-dotted underline-offset-2'>
         <span>To try things out use these credentials</span>
-        <ChevronRight className='size-4' />
+        <ChevronRightIcon className='size-4' />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -48,7 +48,7 @@ export default function DemoCredentials() {
                   setTimeout(() => setEmailCopied(false), 2000);
                 }}
               >
-                {emailCopied ? <Check /> : <Copy />}
+                {emailCopied ? <CheckIcon /> : <CopyIcon />}
               </Button>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function DemoCredentials() {
                   setTimeout(() => setPasswordCopied(false), 2000);
                 }}
               >
-                {passwordCopied ? <Check /> : <Copy />}
+                {passwordCopied ? <CheckIcon /> : <CopyIcon />}
               </Button>
             </div>
           </div>

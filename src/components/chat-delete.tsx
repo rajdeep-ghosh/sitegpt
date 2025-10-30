@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -86,7 +86,7 @@ export default function ChatDelete({ open, onOpenChange }: ChatDeleteProps) {
             onClick={() => trigger().catch(console.error)}
             className='rounded-lg text-sm'
           >
-            {isMutating ? <Loader2 className='animate-spin' /> : 'Delete'}
+            {isMutating ? <Loader2Icon className='animate-spin' /> : 'Delete'}
           </Button>
         </CompFooter>
       </CompContent>
