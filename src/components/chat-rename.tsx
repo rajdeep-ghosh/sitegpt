@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -89,7 +89,7 @@ export default function ChatRename({ open, onOpenChange }: ChatRenameProps) {
             onClick={() => trigger(title).catch(console.error)}
             className='rounded-lg text-sm'
           >
-            {isMutating ? <Loader2 className='animate-spin' /> : 'Save'}
+            {isMutating ? <Loader2Icon className='animate-spin' /> : 'Save'}
           </Button>
         </CompFooter>
       </CompContent>

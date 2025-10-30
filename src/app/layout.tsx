@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs';
 import { auth } from '@clerk/nextjs/server';
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircleIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -93,7 +93,7 @@ export default async function HomeLayout({
         <ClerkProvider>
           <ClerkLoading>
             <div className='grid h-screen place-items-center'>
-              <LoaderCircle className='size-24 animate-spin text-muted-foreground' />
+              <LoaderCircleIcon className='size-24 animate-spin text-muted-foreground' />
             </div>
           </ClerkLoading>
           <ClerkLoaded>

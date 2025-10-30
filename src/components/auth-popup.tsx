@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Lock } from 'lucide-react';
+import { LockIcon } from 'lucide-react';
 
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,7 @@ export default function AuthPopup({ open, onOpenChange }: AuthPopupProps) {
       <CompContent>
         <div className='flex flex-col gap-6 p-4 py-6 md:p-0'>
           <div className='flex flex-col items-center justify-center gap-5'>
-            <Lock className='size-12 text-center' />
+            <LockIcon className='size-12 text-center' />
             <div className='text-center'>
               <h3 className='pb-1 text-lg font-semibold md:text-xl'>
                 Login to continue

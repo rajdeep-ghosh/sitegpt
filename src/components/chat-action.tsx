@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Check, Ellipsis, Link, PenLine, Trash } from 'lucide-react';
+import {
+  CheckIcon,
+  EllipsisIcon,
+  LinkIcon,
+  PenLineIcon,
+  TrashIcon
+} from 'lucide-react';
 
 import { useChatData } from '@/hooks/use-chat-data';
 import { Button } from '@/components/ui/button';
@@ -44,7 +50,7 @@ export default function ChatAction() {
               size='icon'
               className='size-7 data-[state=open]:bg-accent'
             >
-              <Ellipsis />
+              <EllipsisIcon />
             </Button>
           </PopoverTrigger>
           <PopoverContent
@@ -67,7 +73,7 @@ export default function ChatAction() {
                           }}
                           className='[&>svg]:text-muted-foreground [&>svg]:transition-colors [&>svg]:[shape-rendering:crispEdges] [&>svg]:hover:text-current'
                         >
-                          {copiedToClipboard ? <Check /> : <Link />}
+                          {copiedToClipboard ? <CheckIcon /> : <LinkIcon />}
                           <span>Copy Source Link</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -76,7 +82,7 @@ export default function ChatAction() {
                           onClick={() => setOpenChatRename(true)}
                           className='[&>svg]:text-muted-foreground [&>svg]:transition-colors [&>svg]:[shape-rendering:crispEdges] [&>svg]:hover:text-current'
                         >
-                          <PenLine />
+                          <PenLineIcon />
                           <span>Rename</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -85,7 +91,7 @@ export default function ChatAction() {
                           onClick={() => setOpenChatDelete(true)}
                           className='text-red-400 hover:bg-red-400/15 hover:text-red-400 active:bg-red-400/15 active:text-red-400 [&>svg]:text-red-400 [&>svg]:transition-colors [&>svg]:[shape-rendering:crispEdges] [&>svg]:hover:text-current'
                         >
-                          <Trash />
+                          <TrashIcon />
                           <span>Delete</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
