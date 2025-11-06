@@ -12,11 +12,7 @@
     "db:migrate": "tsx --env-file=.env.local src/lib/db/migrate.ts",
     "lint": "next lint",
     "format": "prettier --check ./src",
-    "format:fix": "prettier --write ./src --ignore-unknown",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "format:fix": "prettier --write ./src --ignore-unknown"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.23.3",
@@ -65,8 +61,6 @@
     "eslint-import-resolver-typescript": "^3.5.3",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
