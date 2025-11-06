@@ -30,6 +30,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.1.4",
+    "@t3-oss/env-nextjs": "^0.11.1",
     "@upstash/rag-chat": "^2.0.3",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.34.3",
@@ -49,7 +50,6 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
-    "@t3-oss/env-nextjs": "^0.11.1",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "^18",
