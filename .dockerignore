@@ -4,4 +4,9 @@ node_modules
 .gitignore
 .github
 .vscode
+.editorconfig
+.eslintignore
+.eslintrc.json
+.prettierignore
+prettier.config.js
 *.md
